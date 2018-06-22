@@ -69,10 +69,14 @@ class Dataset():
                     train_split = files[0:num_train]
                     test_split = files[num_train:]
 
-                    train_sample = os.path.basename(root) + ", " + \
-                        reduce(lambda l, s: l + ", " + s, train_split) + "\n"
-                    test_sample = os.path.basename(root) + ", " + \
-                        reduce(lambda l, s: l + ", " + s, test_split) + "\n"
+                    if len(train_split) > 1:
+                        train_sample = os.path.basename(root) + ", " + \
+                            reduce(lambda l, s: l + ", " +
+                                   s, train_split) + "\n"
+                    if len(test_split) > 1:
+                        test_sample = os.path.basename(root) + ", " + \
+                            reduce(lambda l, s: l + ", " +
+                                   s, test_split) + "\n"
 
                     train.write(train_sample)
                     test.write(test_sample)
@@ -85,9 +89,9 @@ class Dataset():
 
 
 if __name__ == "__main__":
-    dataset = Dataset("../../../datasets/standard_att")
-    folds = 5
+    dataset = Dataset("../../../datasets/norm_standard_att")
+    folds = 50
 
     for i in range(1, folds+1):
-        print "Generating 'Fold", i, "'\n"
+        print "Generating Fold", i, "..."
         dataset.split(fold=i)
