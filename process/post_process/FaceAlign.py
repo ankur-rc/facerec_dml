@@ -5,6 +5,7 @@ from LandmarkDetector import LandmarkDetector
 import numpy as np
 import imutils
 import os
+import shutil
 
 """
 Inspired from 'Face Alignment with OpenCV and Python'
@@ -102,17 +103,30 @@ class FaceAlign():
 
 if __name__ == '__main__':
 
-    dataset_path = '../../../../datasets/cyber_extruder_ultimate'
-    no_face_file = "no_face.txt"
-    multi_face_file = "multi_face.txt"
+    dataset_path = '../../../../datasets/standard_att'
+    #no_face_file = "no_face.txt"
+    #multi_face_file = "multi_face.txt"
+
+    normalized_dataset = "norm_" + \
+        os.path.basename(os.path.realpath(dataset_path))
+
+    if os.path.exists(normalized_dataset):
+        shutil.rmtree(normalized_dataset)
+
+    os.mkdir(normalized_dataset)
 
     detector = dlib.get_frontal_face_detector()
     predictor = LandmarkDetector()
 
     for root, dirs, files in os.walk(dataset_path):
+
+        #print "dirs", dirs
         for direc in dirs:
-            path = dataset_path + os.sep + direc + os.sep + '00000%d.jpg'
+            print "direc", direc
+            extension = ".png"
+            path = dataset_path + os.sep + direc + os.sep + '%d' + extension
             sequence = cv2.VideoCapture(path)
+
             while sequence.isOpened():
                 ret, rgbImg = sequence.read()
                 grayImg = None
@@ -124,25 +138,29 @@ if __name__ == '__main__':
                 else:
                     grayImg = rgbImg
 
+                # equalize histogram
+                grayImg = cv2.equalizeHist(grayImg)
+
                 # find a face
                 faces = detector(grayImg, 0)
 
-                if len(faces) >= 1:
+                if len(faces) == 1:
 
-                    if len(faces) > 1:
-                        with open(multi_face_file, 'a') as f:
-                            line = direc + ", " + \
-                                str(int(sequence.get(cv2.CAP_PROP_POS_FRAMES)))+"\n"
-                            f.write(line)
+                    # if len(faces) > 1:
+                        # with open(multi_face_file, 'a') as f:
+                        #     line = direc + ", " + \
+                        #         str(int(sequence.get(cv2.CAP_PROP_POS_FRAMES)))+"\n"
+                        #     f.write(line)
 
-                    # get face (only interested if there's one and only one)
+                        # get face (only interested if there's one and only one)
                     face = faces[0]
 
                     # get the landmarks
                     landmarks = predictor.predict(face, grayImg)
 
                     # get FaceAlign object
-                    face_align = FaceAlign()
+                    face_align = FaceAlign(
+                        final_height=150, final_width=150, left_eye_offset=(0.25, 0.25))
 
                     # align the face
                     aligned_face = face_align.align(grayImg, landmarks)
@@ -170,9 +188,16 @@ if __name__ == '__main__':
                     #     cv2.destroyAllWindows()
                     #     quit()
 
-                else:
+                    if not os.path.exists(normalized_dataset+os.sep+direc):
+                        os.mkdir(normalized_dataset+os.sep+direc)
 
-                    with open(no_face_file, 'a') as f:
-                        line = direc + ", " + \
-                            str(int(sequence.get(cv2.CAP_PROP_POS_FRAMES)))+"\n"
-                        f.write(line)
+                    filename = normalized_dataset+os.sep+direc + os.sep + \
+                        str(int(sequence.get(cv2.CAP_PROP_POS_FRAMES))) + extension
+                    cv2.imwrite(filename, aligned_face)
+
+                else:
+                    pass
+                    # with open(no_face_file, 'a') as f:
+                    #     line = direc + ", " + \
+                    #         str(int(sequence.get(cv2.CAP_PROP_POS_FRAMES)))+"\n"
+                    #     f.write(line)
