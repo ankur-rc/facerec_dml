@@ -27,7 +27,7 @@ class FaceAlign():
 
     def __init__(self, left_eye_offset=(0.35, 0.35), final_width=256, final_height=None):
         """
-        Instantiate a 'FaceAlign' class
+        Instantiate a 'FaceAlign' object
 
         :param left_eye_offset: the amount by which to anchor the left eye center
         :type left_eye_offset: 2-tuple
