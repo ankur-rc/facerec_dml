@@ -192,7 +192,7 @@ if __name__ == '__main__':
                         os.mkdir(normalized_dataset+os.sep+direc)
 
                     filename = normalized_dataset+os.sep+direc + os.sep + \
-                        str(int(sequence.get(cv2.CAP_PROP_POS_FRAMES))) + extension
+                        str(int(sequence.get(cv2.CAP_PROP_POS_FRAMES))) + ".pgm"
                     cv2.imwrite(filename, aligned_face)
 
                 else:
