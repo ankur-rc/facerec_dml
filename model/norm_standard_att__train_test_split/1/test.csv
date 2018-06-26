@@ -1,40 +1,40 @@
-1, 1.pgm, 8.pgm, 3.pgm, 5.pgm, 4.pgm, 10.pgm, 2.pgm, 7.pgm
-10, 8.pgm, 5.pgm, 10.pgm, 6.pgm, 9.pgm, 7.pgm, 4.pgm, 2.pgm
-11, 5.pgm, 9.pgm, 6.pgm, 7.pgm, 3.pgm, 1.pgm, 8.pgm, 4.pgm
-12, 10.pgm, 8.pgm, 4.pgm, 7.pgm, 5.pgm, 2.pgm, 3.pgm, 9.pgm
-13, 9.pgm, 10.pgm, 6.pgm, 7.pgm, 2.pgm, 5.pgm, 4.pgm, 8.pgm
-14, 10.pgm, 5.pgm, 4.pgm, 3.pgm, 2.pgm, 7.pgm, 9.pgm, 1.pgm
-15, 8.pgm, 1.pgm, 5.pgm, 2.pgm, 3.pgm, 9.pgm, 7.pgm, 6.pgm
-16, 7.pgm, 4.pgm, 10.pgm, 9.pgm, 5.pgm, 1.pgm, 3.pgm, 6.pgm
-17, 2.pgm, 9.pgm, 3.pgm, 6.pgm, 5.pgm, 7.pgm, 4.pgm, 8.pgm
-18, 8.pgm, 9.pgm, 3.pgm, 5.pgm, 7.pgm, 6.pgm, 4.pgm, 1.pgm
-19, 10.pgm, 4.pgm, 3.pgm, 1.pgm, 7.pgm, 9.pgm, 6.pgm, 5.pgm
-2, 7.pgm, 10.pgm, 3.pgm, 4.pgm, 2.pgm, 5.pgm, 6.pgm, 9.pgm
-20, 9.pgm, 7.pgm, 10.pgm, 3.pgm, 6.pgm, 5.pgm, 2.pgm, 4.pgm
-21, 1.pgm, 8.pgm, 6.pgm, 10.pgm, 2.pgm, 9.pgm, 5.pgm, 4.pgm
-22, 2.pgm, 7.pgm, 4.pgm, 10.pgm, 3.pgm, 1.pgm, 6.pgm, 5.pgm
-23, 4.pgm, 5.pgm, 8.pgm, 10.pgm, 7.pgm, 3.pgm, 2.pgm, 9.pgm
-24, 4.pgm, 6.pgm, 2.pgm, 10.pgm, 8.pgm, 3.pgm, 5.pgm, 7.pgm
-25, 6.pgm, 5.pgm, 3.pgm, 10.pgm, 9.pgm, 7.pgm, 4.pgm, 8.pgm
-26, 4.pgm, 8.pgm, 3.pgm, 6.pgm, 9.pgm, 2.pgm, 5.pgm, 1.pgm
-27, 9.pgm, 3.pgm, 2.pgm, 6.pgm, 1.pgm, 4.pgm, 10.pgm, 5.pgm
-28, 2.pgm, 5.pgm, 1.pgm, 4.pgm, 9.pgm, 7.pgm, 10.pgm, 8.pgm
-29, 2.pgm, 10.pgm, 4.pgm, 9.pgm, 8.pgm, 6.pgm, 5.pgm, 3.pgm
-3, 1.pgm, 3.pgm, 7.pgm, 6.pgm, 10.pgm, 2.pgm, 4.pgm, 8.pgm
-30, 2.pgm, 7.pgm, 9.pgm, 3.pgm, 5.pgm, 6.pgm, 4.pgm, 10.pgm
-31, 10.pgm, 2.pgm, 6.pgm, 8.pgm, 5.pgm, 1.pgm, 3.pgm, 4.pgm
-32, 7.pgm, 1.pgm, 5.pgm, 4.pgm, 9.pgm, 2.pgm, 8.pgm, 3.pgm
-33, 5.pgm, 6.pgm, 1.pgm, 7.pgm, 9.pgm
-34, 8.pgm, 7.pgm, 9.pgm, 5.pgm, 2.pgm, 6.pgm, 4.pgm, 1.pgm
-35, 5.pgm, 10.pgm, 6.pgm, 7.pgm, 9.pgm, 4.pgm, 1.pgm
-36, 10.pgm, 1.pgm, 5.pgm, 4.pgm, 6.pgm, 3.pgm, 7.pgm, 2.pgm
-37, 2.pgm, 3.pgm, 10.pgm, 1.pgm, 7.pgm, 8.pgm
-38, 3.pgm, 2.pgm, 7.pgm, 9.pgm, 10.pgm, 6.pgm, 8.pgm, 4.pgm
-39, 8.pgm, 6.pgm, 4.pgm, 5.pgm, 1.pgm, 10.pgm, 7.pgm, 9.pgm
-4, 4.pgm, 5.pgm, 2.pgm, 10.pgm, 6.pgm, 1.pgm, 9.pgm, 8.pgm
-40, 6.pgm, 1.pgm, 7.pgm, 3.pgm, 2.pgm, 10.pgm, 4.pgm, 9.pgm
-5, 8.pgm, 10.pgm, 2.pgm, 1.pgm, 4.pgm, 5.pgm, 7.pgm, 6.pgm
-6, 9.pgm, 8.pgm, 5.pgm, 6.pgm, 4.pgm, 3.pgm, 1.pgm, 10.pgm
-7, 10.pgm, 9.pgm, 2.pgm, 4.pgm, 5.pgm, 3.pgm, 6.pgm, 1.pgm
-8, 3.pgm, 10.pgm, 6.pgm, 5.pgm, 7.pgm, 4.pgm, 9.pgm, 8.pgm
-9, 2.pgm, 7.pgm, 10.pgm, 1.pgm, 6.pgm, 5.pgm, 4.pgm, 3.pgm
+1, 10.pgm, 8.pgm, 2.pgm, 4.pgm
+10, 3.pgm, 2.pgm, 1.pgm, 4.pgm
+11, 2.pgm, 7.pgm, 6.pgm, 8.pgm
+12, 1.pgm, 6.pgm, 7.pgm, 8.pgm
+13, 9.pgm, 6.pgm, 10.pgm, 7.pgm
+14, 6.pgm, 1.pgm, 7.pgm, 3.pgm
+15, 3.pgm, 4.pgm, 5.pgm, 2.pgm
+16, 3.pgm, 7.pgm, 9.pgm, 1.pgm
+17, 8.pgm, 3.pgm, 5.pgm, 7.pgm
+18, 2.pgm, 10.pgm, 6.pgm, 8.pgm
+19, 5.pgm, 3.pgm, 2.pgm, 8.pgm
+2, 5.pgm, 4.pgm, 10.pgm, 3.pgm
+20, 5.pgm, 3.pgm, 2.pgm, 1.pgm
+21, 5.pgm, 10.pgm, 8.pgm, 7.pgm
+22, 7.pgm, 3.pgm, 5.pgm, 6.pgm
+23, 7.pgm, 10.pgm, 2.pgm, 6.pgm
+24, 1.pgm, 3.pgm, 9.pgm, 8.pgm
+25, 7.pgm, 4.pgm, 9.pgm, 3.pgm
+26, 7.pgm, 4.pgm, 5.pgm, 8.pgm
+27, 4.pgm, 6.pgm, 3.pgm, 10.pgm
+28, 9.pgm, 5.pgm, 10.pgm, 7.pgm
+29, 10.pgm, 3.pgm, 5.pgm, 9.pgm
+3, 3.pgm, 1.pgm, 9.pgm, 5.pgm
+30, 1.pgm, 4.pgm, 9.pgm, 3.pgm
+31, 5.pgm, 3.pgm, 9.pgm, 4.pgm
+32, 1.pgm, 10.pgm, 7.pgm, 9.pgm
+33, 8.pgm
+34, 2.pgm, 7.pgm, 10.pgm, 6.pgm
+35, 5.pgm, 10.pgm, 4.pgm
+36, 7.pgm, 5.pgm, 4.pgm, 1.pgm
+37, 1.pgm, 2.pgm
+38, 3.pgm, 1.pgm, 7.pgm, 10.pgm
+39, 6.pgm, 4.pgm, 8.pgm, 5.pgm
+4, 4.pgm, 1.pgm, 9.pgm, 3.pgm
+40, 2.pgm, 9.pgm, 1.pgm, 3.pgm
+5, 5.pgm, 7.pgm, 10.pgm, 4.pgm
+6, 3.pgm, 7.pgm, 8.pgm, 5.pgm
+7, 6.pgm, 8.pgm, 1.pgm, 4.pgm
+8, 9.pgm, 8.pgm, 5.pgm, 1.pgm
+9, 7.pgm, 5.pgm, 1.pgm, 3.pgm

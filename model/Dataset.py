@@ -150,15 +150,15 @@ class Dataset():
 
                 images_path = self.dataset_path + os.path.sep + label
                 for image in imgs:
-                    img = cv2.imread(
-                        images_path + os.path.sep + image.strip(), cv2.IMREAD_GRAYSCALE)
+                    img = cv2.imread(os.path.join(
+                        images_path, image.strip()), cv2.IMREAD_GRAYSCALE)
                     #print img.shape
                     X.append(img)
-                    y.append(label)
+                    y.append(int(label))
 
         y = np.array(y)
-        X = np.array(X)
-        print y.shape, X.shape
+        # X = np.array(X)
+        # print y.shape, X.shape
 
         return X, y
 
@@ -166,7 +166,7 @@ class Dataset():
 if __name__ == "__main__":
     dataset = Dataset("../../../datasets/norm_cyber_extruder_ultimate")
     folds = 1
-    training_samples = [2]
+    training_samples = [6]
 
     for training_sample in training_samples:
         print "Generating for", training_sample, "training samples per subject"

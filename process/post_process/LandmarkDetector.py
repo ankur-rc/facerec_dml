@@ -61,7 +61,7 @@ if __name__ == '__main__':
                 else:
                     grayImg = rgbImg
 
-                bounding_boxes = detector(grayImg, 0)
+                bounding_boxes = deteCctor(grayImg, 0)
 
                 for (i, bounding_box) in enumerate(bounding_boxes):
 

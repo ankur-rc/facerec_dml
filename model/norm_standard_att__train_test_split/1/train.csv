@@ -1,40 +1,40 @@
-1, 9.pgm, 6.pgm
-10, 1.pgm, 3.pgm
-11, 2.pgm, 10.pgm
-12, 1.pgm, 6.pgm
-13, 1.pgm, 3.pgm
-14, 8.pgm, 6.pgm
-15, 10.pgm, 4.pgm
-16, 2.pgm, 8.pgm
-17, 1.pgm, 10.pgm
-18, 2.pgm, 10.pgm
-19, 2.pgm, 8.pgm
-2, 8.pgm, 1.pgm
-20, 8.pgm, 1.pgm
-21, 7.pgm, 3.pgm
-22, 8.pgm, 9.pgm
-23, 6.pgm, 1.pgm
-24, 9.pgm, 1.pgm
-25, 2.pgm, 1.pgm
-26, 7.pgm, 10.pgm
-27, 7.pgm, 8.pgm
-28, 3.pgm, 6.pgm
-29, 1.pgm, 7.pgm
-3, 5.pgm, 9.pgm
-30, 1.pgm, 8.pgm
-31, 9.pgm, 7.pgm
-32, 10.pgm, 6.pgm
-33, 8.pgm, 3.pgm
-34, 3.pgm, 10.pgm
-35, 8.pgm, 3.pgm
-36, 9.pgm, 8.pgm
-37, 9.pgm, 6.pgm
-38, 1.pgm, 5.pgm
-39, 2.pgm, 3.pgm
-4, 7.pgm, 3.pgm
-40, 5.pgm, 8.pgm
-5, 3.pgm, 9.pgm
-6, 2.pgm, 7.pgm
-7, 7.pgm, 8.pgm
-8, 2.pgm, 1.pgm
-9, 9.pgm, 8.pgm
+1, 7.pgm, 1.pgm, 9.pgm, 5.pgm, 3.pgm, 6.pgm
+10, 5.pgm, 10.pgm, 9.pgm, 6.pgm, 7.pgm, 8.pgm
+11, 1.pgm, 4.pgm, 3.pgm, 10.pgm, 5.pgm, 9.pgm
+12, 5.pgm, 9.pgm, 2.pgm, 3.pgm, 10.pgm, 4.pgm
+13, 4.pgm, 5.pgm, 1.pgm, 2.pgm, 8.pgm, 3.pgm
+14, 4.pgm, 10.pgm, 5.pgm, 2.pgm, 8.pgm, 9.pgm
+15, 10.pgm, 1.pgm, 7.pgm, 9.pgm, 6.pgm, 8.pgm
+16, 6.pgm, 2.pgm, 5.pgm, 8.pgm, 10.pgm, 4.pgm
+17, 2.pgm, 10.pgm, 4.pgm, 9.pgm, 1.pgm, 6.pgm
+18, 7.pgm, 4.pgm, 5.pgm, 9.pgm, 1.pgm, 3.pgm
+19, 9.pgm, 10.pgm, 4.pgm, 6.pgm, 7.pgm, 1.pgm
+2, 8.pgm, 6.pgm, 7.pgm, 2.pgm, 9.pgm, 1.pgm
+20, 7.pgm, 8.pgm, 4.pgm, 10.pgm, 6.pgm, 9.pgm
+21, 4.pgm, 9.pgm, 2.pgm, 6.pgm, 3.pgm, 1.pgm
+22, 1.pgm, 9.pgm, 4.pgm, 8.pgm, 10.pgm, 2.pgm
+23, 3.pgm, 9.pgm, 4.pgm, 5.pgm, 1.pgm, 8.pgm
+24, 5.pgm, 4.pgm, 7.pgm, 10.pgm, 6.pgm, 2.pgm
+25, 10.pgm, 8.pgm, 1.pgm, 5.pgm, 2.pgm, 6.pgm
+26, 6.pgm, 3.pgm, 10.pgm, 9.pgm, 2.pgm, 1.pgm
+27, 9.pgm, 2.pgm, 5.pgm, 8.pgm, 7.pgm, 1.pgm
+28, 6.pgm, 4.pgm, 3.pgm, 8.pgm, 2.pgm, 1.pgm
+29, 6.pgm, 4.pgm, 7.pgm, 2.pgm, 8.pgm, 1.pgm
+3, 8.pgm, 10.pgm, 4.pgm, 6.pgm, 7.pgm, 2.pgm
+30, 7.pgm, 2.pgm, 6.pgm, 8.pgm, 10.pgm, 5.pgm
+31, 7.pgm, 6.pgm, 8.pgm, 2.pgm, 1.pgm, 10.pgm
+32, 2.pgm, 3.pgm, 8.pgm, 6.pgm, 5.pgm, 4.pgm
+33, 9.pgm, 3.pgm, 6.pgm, 7.pgm, 1.pgm, 5.pgm
+34, 9.pgm, 1.pgm, 5.pgm, 8.pgm, 3.pgm, 4.pgm
+35, 1.pgm, 9.pgm, 6.pgm, 8.pgm, 7.pgm, 3.pgm
+36, 10.pgm, 8.pgm, 3.pgm, 2.pgm, 6.pgm, 9.pgm
+37, 7.pgm, 6.pgm, 9.pgm, 10.pgm, 8.pgm, 3.pgm
+38, 6.pgm, 2.pgm, 8.pgm, 4.pgm, 9.pgm, 5.pgm
+39, 10.pgm, 2.pgm, 1.pgm, 7.pgm, 9.pgm, 3.pgm
+4, 10.pgm, 8.pgm, 7.pgm, 5.pgm, 6.pgm, 2.pgm
+40, 7.pgm, 5.pgm, 4.pgm, 6.pgm, 10.pgm, 8.pgm
+5, 8.pgm, 2.pgm, 3.pgm, 1.pgm, 6.pgm, 9.pgm
+6, 10.pgm, 6.pgm, 2.pgm, 1.pgm, 9.pgm, 4.pgm
+7, 9.pgm, 10.pgm, 2.pgm, 5.pgm, 3.pgm, 7.pgm
+8, 4.pgm, 6.pgm, 2.pgm, 3.pgm, 7.pgm, 10.pgm
+9, 2.pgm, 6.pgm, 4.pgm, 10.pgm, 8.pgm, 9.pgm
