@@ -21,13 +21,13 @@ if __name__ == "__main__":
 
     output = Queue()
 
-    X_train, y_train = dataset.load_data(is_train=True, fold=1)
+    X_train, y_train = dataset.load_data(is_train=True, fold=1, num_train=2)
     print "Training recognizer (", len(X_train), "samples and", len(
         np.unique(y_train)), "subjects)..."
     recognizer_model.train(X_train, y_train)
     print "completed."
 
-    X_test, y_test = dataset.load_data(is_train=False, fold=1)
+    X_test, y_test = dataset.load_data(is_train=False, fold=1, num_train=2)
 
     print "Predicting on (", len(X_test), "samples)..."
 

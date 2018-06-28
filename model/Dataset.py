@@ -30,6 +30,12 @@ class Dataset():
         self.dataset_split = os.path.basename(
             dataset_path)+dataset_split_path_suffix
 
+    def clear_splits(self):
+        if os.path.exists(self.dataset_split):
+            print "Removing stale directory:", self.dataset_split, "..."
+            shutil.rmtree(self.dataset_split)
+            print "done."
+
     def split(self, num_train=2, fold=1):
         """
         Generates a train-test split based on the number of training samples
@@ -40,27 +46,29 @@ class Dataset():
         :type fold: int
         """
 
-        if os.path.exists(self.dataset_split):
-            #print "Removing stale directory:", self.dataset_split, "..."
-            shutil.rmtree(self.dataset_split)
-            #print "done."
+        # if os.path.exists(os.path.join(self.dataset_split, str(num_train))):
+        #     # print "Removing stale directory:", self.dataset_split, "..."
+        #     shutil.rmtree(os.path.join(self.dataset_split, str(num_train)))
+        #     # print "done."
 
-        print "Creating directory:", self.dataset_split, "..."
-        os.mkdir(self.dataset_split)
-        print "done."
+        # print "Creating directory:", os.path.join(
+        #     self.dataset_split, str(num_train)), "..."
+        # os.makedirs(os.path.join(self.dataset_split, str(num_train)))
+        # print "done."
 
         train_file = "train.csv"
         test_file = "test.csv"
 
-        fold_path = self.dataset_split + os.sep + str(fold)
+        fold_path = self.dataset_split + os.sep + \
+            str(num_train) + os.path.sep + str(fold)
         if os.path.exists(fold_path):
-            #print "Removing stale directory:", fold_path, "..."
+            # print "Removing stale directory:", fold_path, "..."
             shutil.rmtree(fold_path)
-            #print "done."
+            # print "done."
 
-        #print "Creating directory:", fold_path, "..."
-        os.mkdir(fold_path)
-        #print "done."
+        # print "Creating directory:", fold_path, "..."
+        os.makedirs(fold_path)
+        # print "done."
 
         bar = pbar.tqdm(total=int(9e9))
         subjects = 0
@@ -73,7 +81,7 @@ class Dataset():
 
                 if root != self.dataset_path:
                     bar.set_description("Dir-->" + os.path.basename(root))
-                    #seed = fold*i
+                    # seed = fold*i
                     random.Random().shuffle(files)
 
                     bar.update()
@@ -106,7 +114,7 @@ class Dataset():
         print "The following directories were rejected: ", rejected_dirs
         print "We have", subjects, "subjects in our dataset."
 
-    def load_data(self, is_train, fold):
+    def load_data(self, is_train, num_train, fold):
         """
         Gets the test or train data
 
@@ -114,6 +122,8 @@ class Dataset():
         :type is_train: bool
         :param fold: the fold for which data needs to be loaded
         :type fold: int
+        :param num_train: the subdirectory indicating number of training samples per subject
+        :type num_train: int
         :return test data: a tuple of a vector of faces and it's corresponding labels
         :rtype test data: (numpy.ndarray, numpy.ndarray)
         """
@@ -125,6 +135,9 @@ class Dataset():
         if fold is None:
             raise Exception("Fold identifier is uspecified!")
 
+        if num_train is None:
+            raise Exception("Training sample identifier unspecified!")
+
         if is_train is None:
             raise Exception("Train/Test flag is unspecified!")
 
@@ -135,7 +148,7 @@ class Dataset():
             suffix = "test.csv"
 
         csv_file = self.dataset_split + os.path.sep + \
-            str(fold) + os.path.sep + suffix
+            str(num_train) + os.path.sep + str(fold) + os.path.sep + suffix
         X = []
         y = []
 
@@ -146,13 +159,13 @@ class Dataset():
                 label = parts[0]
                 imgs = parts[1:]
 
-                #print label, "imgs:", train_imgs
+                # print label, "imgs:", train_imgs
 
                 images_path = self.dataset_path + os.path.sep + label
                 for image in imgs:
                     img = cv2.imread(os.path.join(
                         images_path, image.strip()), cv2.IMREAD_GRAYSCALE)
-                    #print img.shape
+                    # print img.shape
                     X.append(img)
                     y.append(int(label))
 
@@ -165,14 +178,15 @@ class Dataset():
 
 if __name__ == "__main__":
     dataset = Dataset("../../../datasets/norm_cyber_extruder_ultimate")
-    folds = 1
-    training_samples = [6]
+    folds = 3
+    training_samples = [2, 5, 8]
 
+    dataset.clear_splits()
     for training_sample in training_samples:
         print "Generating for", training_sample, "training samples per subject"
         for i in range(1, folds+1):
             print "Generating: Fold", i
             dataset.split(num_train=training_sample, fold=i)
 
-    X_train, y_train = dataset.load_data(is_train=True, fold=1)
-    X_test, y_test = dataset.load_data(is_train=False, fold=1)
+    # X_train, y_train = dataset.load_data(is_train=True, fold=1, num_train=2)
+    # X_test, y_test = dataset.load_data(is_train=False, fold=1, num_train=2)
