@@ -43,7 +43,7 @@ class FaceRecognizer():
         """
 
         embeddings = []
-        for i in tqdm.trange(0, len(images)):
+        for i in tqdm.tnrange(0, len(images)):
             img = images[i]
             img = cv2.cvtColor(img, cv2.COLOR_GRAY2RGB)
 
@@ -88,7 +88,7 @@ class FaceRecognizer():
 
         precision_perc = acc_svc*100
 
-        print "Precision@1:", precision_perc, "%"
+        return precision_perc
 
     def save(self, name):
 
