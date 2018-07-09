@@ -178,16 +178,16 @@ class Dataset():
 
 
 if __name__ == "__main__":
-    dataset = Dataset("../../../datasets/norm_standard_att")
+    dataset = Dataset("../../../datasets/norm_cyber_extruder_ultimate")
     folds = 3
     training_samples = [2, 5, 8]
 
-    # dataset.clear_splits()
-    # for training_sample in training_samples:
-    #     print "Generating for", training_sample, "training samples per subject"
-    #     for i in range(1, folds+1):
-    #         print "Generating: Fold", i
-    #         dataset.split(num_train=training_sample, fold=i)
+    dataset.clear_splits()
+    for training_sample in training_samples:
+        print "Generating for", training_sample, "training samples per subject"
+        for i in range(1, folds+1):
+            print "Generating: Fold", i
+            dataset.split(num_train=training_sample, fold=i)
 
     X_train, y_train = dataset.load_data(is_train=True, fold=1, num_train=2)
     X_test, y_test = dataset.load_data(is_train=False, fold=1, num_train=2)
