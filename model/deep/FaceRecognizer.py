@@ -78,6 +78,14 @@ class FaceRecognizer():
         self.svc.fit(X_train, y_train)
 
     def evaluate(self, X_test, ground_truths):
+        """
+        Evaluate the trained SVC on the training set.
+
+        :param X_test: the test embeddings
+        :type X_test: numpy.ndarray, shape=(N,128)
+        :param ground_truths: the ground truth data corresponding to the test set
+        :type ground_truths: numpy.ndarray, shape=(N,1)
+        """
 
         encoder = LabelEncoder()
 
@@ -92,11 +100,11 @@ class FaceRecognizer():
 
     def save(self, name):
 
-        self.model.write(name)
+        raise NotImplementedError()
 
     def load(self, name):
 
-        self.model.read(name)
+        raise NotImplementedError()
 
 
 if __name__ == "__main__":
