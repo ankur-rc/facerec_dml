@@ -36,10 +36,11 @@ def run():
     camera_index = 0
     width, height = 150, 150
     batch_size = 32
+    face_recognition_confidence_threshold = 0.25
 
     face_landmark_predictor_path = "pre_trained/shape_predictor_5_face_landmarks.dat"
     face_recognizer_model_path = "pre_trained/dlib_face_recognition_resnet_model_v1.dat"
-    svm_model_path = "pre_trained/face_classifier.pkl"
+    svm_model_path = "pre_trained/svm_proba.pkl"
 
     source = cv2.VideoCapture(index=camera_index)
     fps_counter = RepeatedTimer(interval=1.0, function=fps_count)
@@ -80,7 +81,7 @@ def run():
 
             bb = (face.left(), face.top(), face.right(), face.bottom())
             cv2.rectangle(frame, (bb[0], bb[1]), (bb[2], bb[3]), (255, 0, 255))
-            print("Sequence:", sequence)
+            # print("Sequence:", sequence)
 
             # resize the face
             # face = cv2.resize(grayImg, (width, height),
@@ -90,14 +91,16 @@ def run():
             landmark = landmark_detector.predict(face, grayImg)
 
             # add face and landmarks till we get a batch of batch_size
-            faces.append(grayImg[bb[0]:bb[2], bb[1]:bb[3]])
-            landmarks.append(landmark)
+            if landmark is not None:
+                faces.append(grayImg[bb[0]:bb[2], bb[1]:bb[3]])
+                landmarks.append(landmark)
 
             if sequence == batch_size:
                 face_embeddings = face_recognizer.embed(
                     images=faces, landmarks=landmarks)
 
-                predicted_identity = face_recognizer.infer(face_embeddings)
+                predicted_identity = face_recognizer.infer(
+                    face_embeddings, threshold=face_recognition_confidence_threshold)
 
                 # cv2.putText(frame, fps_text, (bb[0], bb[1]-5),
                 #             cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 0, 255))

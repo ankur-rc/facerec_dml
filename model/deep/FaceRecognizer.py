@@ -39,7 +39,7 @@ class FaceRecognizer():
         """
         raise NotImplementedError()
 
-    def embed(self, images, landmarks):
+    def embed(self, images, landmarks=None):
         """
         Generates embeddings for the given images
 
@@ -53,7 +53,7 @@ class FaceRecognizer():
 
         embeddings = []
 
-        if not landmarks:
+        if landmarks is None:
             for i in tqdm.tnrange(0, len(images)):
                 img = images[i]
                 img = cv2.cvtColor(img, cv2.COLOR_GRAY2RGB)
@@ -69,11 +69,11 @@ class FaceRecognizer():
 
         else:
             # convert from gray to rgb
-            images = np.array(images)
-            images = images.reshape(images.shape + (1,))
-            images = np.repeat(images, 3, axis=3)
+            # images = np.array(images)
+            # images = images.reshape(images.shape + (1,))
+            # images = np.repeat(images, 3, axis=3)
 
-            #images = [cv2.cvtColor(img, cv2.COLOR_GRAY2RGB) for img in images]
+            images = [cv2.cvtColor(img, cv2.COLOR_GRAY2RGB) for img in images]
 
             embeddings = [self.model.compute_face_descriptor(
                 image, landmarks[i]) for i, image in enumerate(images)]
@@ -128,10 +128,19 @@ class FaceRecognizer():
 
         self.svc = joblib.load(model_path)
 
-    def infer(self, embeddings):
+    def infer(self, embeddings, threshold=0.20):
 
-        predictions = self.svc.predict(np.array(embeddings))
-        identity_predicted = np.max(predictions)
+        predictions = self.svc.predict_proba(np.array(embeddings))
+        prediction_indices = np.argmax(predictions, axis=1)
+        #print predictions.shape
+        prediction_probabilities = np.max(predictions, axis=1)
+        thresholded_probabilities = prediction_probabilities < threshold
+        thresholded_indices = np.nonzero(thresholded_probabilities)
+        prediction_indices[thresholded_indices] = -1
+
+        #print predictions
+
+        identity_predicted = np.max(prediction_indices)
 
         return identity_predicted
 
