@@ -56,10 +56,12 @@ class FaceAlign():
         :param img: rgb or gray-scale image/frame
         :type img: numpy.ndarray
         :landmarks: the x,y-coordinates of the facial landmarks
-        :type landmarks: numpy.ndarray
+        :type landmarks: dlib shape
         :return aligned_img: aligned image of final dimensions
         :rtype: numpy.ndarray
         """
+
+        landmarks = face_utils.shape_to_np(landmarks)
 
         # eye centers
         leye = tuple(np.add(landmarks[FACE_LANDMARK_INDICES["leye_right"]],

@@ -33,7 +33,7 @@ class LandmarkDetector:
         """
 
         shape = self.predictor(grayImg, bounding_box)
-        shape = face_utils.shape_to_np(shape)
+        #shape = face_utils.shape_to_np(shape)
 
         return shape
 
