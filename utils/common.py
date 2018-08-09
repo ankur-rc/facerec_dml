@@ -1,5 +1,6 @@
 import threading
 import time
+import numpy as np
 
 
 def clamp_rectangle(x1=None, y1=None, x2=None, y2=None, x1_min=0, y1_min=0, x2_max=None, y2_max=None):
@@ -27,6 +28,28 @@ def clamp_rectangle(x1=None, y1=None, x2=None, y2=None, x1_min=0, y1_min=0, x2_m
     """
 
     return (max(x1_min, x1), max(y1_min, y1), min(x2_max, x2), min(y2_max, y2))
+
+
+def shape_to_np(shape, dtype="int"):
+    """
+    Convert a dlib.shape to a numpy array
+
+    :param shape: a dlib.shape object
+    :type shape: dlib.shape 
+    :return: converted numpy array 
+    :rtype: numpy.array
+    """
+
+    # initialize the list of (x, y)-coordinates
+        coords = np.zeros((shape.num_parts, 2), dtype=dtype)
+
+        # loop over all facial landmarks and convert them
+        # to a 2-tuple of (x, y)-coordinates
+        for i in range(0, shape.num_parts):
+            coords[i] = (shape.part(i).x, shape.part(i).y)
+
+        # return the list of (x, y)-coordinates
+        return coords
 
 
 class RepeatedTimer(object):

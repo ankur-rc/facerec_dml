@@ -15,17 +15,21 @@ from process.post_process.LandmarkDetector import LandmarkDetector
 from utils.common import RepeatedTimer, clamp_rectangle
 
 
-source = None
+source = None  # reference to cv2.VideoCapture object
 fps_counter = None  # repeated timer object
 frame_count = 0  # frames ingested
 fps = 0  # computed fps
-sequence = 0
-landmarks = []
-faces = []
+sequence = 0  # sequence indicating consecutive face detections
+landmarks = []  # list to hold the face landmarks across the batch
+faces = []  # list to hold face bounding boxes across the batch
+# queue holding information of the last fps counts; used to generate avg, fps
 fps_queue = deque(maxlen=100)
 
 
 def run():
+    """
+    Main loop of the program
+    """
 
     global frame_count
     global source
@@ -51,28 +55,33 @@ def run():
 
     print(source.get(cv2.CAP_PROP_FRAME_WIDTH), "x",
           source.get(cv2.CAP_PROP_FRAME_HEIGHT))
-    fps_counter = RepeatedTimer(interval=1.0, function=fps_count)
+    fps_counter = RepeatedTimer(interval=2.0, function=fps_count)
 
+    # reference to face detector
     face_detector = FaceDetector(face_area_threshold=face_area_threshold)
+    # reference to landmark detector
     landmark_detector = LandmarkDetector(
         predictor_path=face_landmark_predictor_path)
-    # face_aligner = FaceAlign(
-    #     final_height=150, final_width=150, left_eye_offset=(0.25, 0.25))
+    # reference to face recognizer
     face_recognizer = FaceRecognizer(
         model_path=face_recognizer_model_path, svm_model_path=svm_model_path)
 
+    # open the source if not opened already
     if not source.isOpened():
         source.open()
 
+    # initialise the sequence count
     sequence = 0
-    #skip_factor = 100000
 
+    # start the fps counter
     fps_counter.start()
 
+    # loop through the frames in the video feed
     while True:
         ret, frame = source.read()
         frame = cv2.flip(frame, 1)
 
+        # increment frame count; for fps calculation
         frame_count += 1
 
         # convert to grayscale
@@ -84,17 +93,18 @@ def run():
         # detect the largest face
         face = face_detector.detect(grayImg)
 
+        # if a face was detected
         if face is not None:
+
+            # increment sequence count
             sequence += 1
 
+            # get bounding boxes
             bb = clamp_rectangle(x1=face.left(), y1=face.top(
             ), x2=face.right(), y2=face.bottom(), x2_max=grayImg.shape[0]-1, y2_max=grayImg.shape[1]-1)
-            cv2.rectangle(frame, (bb[0], bb[1]), (bb[2], bb[3]), (255, 0, 255))
-            # print("Sequence:", sequence)
 
-            # resize the face
-            # face = cv2.resize(grayImg, (width, height),
-            #                   interpolation=cv2.INTER_AREA)
+            # draw a rectangle around the detected face
+            cv2.rectangle(frame, (bb[0], bb[1]), (bb[2], bb[3]), (255, 0, 255))
 
             # get the landmarks
             landmark = landmark_detector.predict(face, grayImg)
@@ -104,6 +114,7 @@ def run():
                 faces.append(grayImg[bb[0]:bb[2], bb[1]:bb[3]])
                 landmarks.append(landmark)
 
+            # recognize the face in the batch
             if len(faces) == batch_size:
                 face_embeddings = face_recognizer.embed(
                     images=faces, landmarks=landmarks)
@@ -111,18 +122,14 @@ def run():
                 predicted_identity = face_recognizer.infer(
                     face_embeddings, threshold=face_recognition_confidence_threshold)
 
-                # cv2.putText(frame, fps_text, (bb[0], bb[1]-5),
-                #             cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 0, 255))
+                print("Predicted identity:", predicted_identity)
 
-                print("predicted identity:", predicted_identity)
-
+                # start a new face recognition activity
                 start_over()
 
         else:
+            # start a new face recognition activity, because noo face face was detected in the frame
             start_over()
-
-        # if sequence % skip_factor == 0:
-        #     time.sleep(0.5)
 
         # get frame rate
         fps_text = "FPS:" + str(fps)
@@ -179,7 +186,6 @@ def fps_count():
 
     fps = frame_count
     fps_queue.append(fps)
-    #print("FPS:", fps)
 
     frame_count = 0
 
