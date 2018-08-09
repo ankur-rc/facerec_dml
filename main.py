@@ -5,21 +5,24 @@ from __future__ import print_function
 import cv2
 import time
 import traceback
+import numpy as np
+from collections import deque
 
 from model.deep.FaceRecognizer import FaceRecognizer
 from process.FaceDetector import FaceDetector
 from process.post_process.FaceAlign import FaceAlign
 from process.post_process.LandmarkDetector import LandmarkDetector
-from utils.set_interval import RepeatedTimer
+from utils.common import RepeatedTimer, clamp_rectangle
 
 
 source = None
-fps_counter = None
-frame_count = 0
-fps = 0
+fps_counter = None  # repeated timer object
+frame_count = 0  # frames ingested
+fps = 0  # computed fps
 sequence = 0
 landmarks = []
 faces = []
+fps_queue = deque(maxlen=100)
 
 
 def run():
@@ -34,22 +37,27 @@ def run():
 
     face_area_threshold = 0.15
     camera_index = 0
-    width, height = 150, 150
+    # width, height = 150, 150
     batch_size = 32
     face_recognition_confidence_threshold = 0.25
 
-    face_landmark_predictor_path = "pre_trained/shape_predictor_5_face_landmarks.dat"
-    face_recognizer_model_path = "pre_trained/dlib_face_recognition_resnet_model_v1.dat"
-    svm_model_path = "pre_trained/svm_proba.pkl"
+    face_landmark_predictor_path = "/media/ankurrc/new_volume/softura/facerec/code/face-trigger/pre_trained/shape_predictor_5_face_landmarks.dat"
+    face_recognizer_model_path = "/media/ankurrc/new_volume/softura/facerec/code/face-trigger/pre_trained/dlib_face_recognition_resnet_model_v1.dat"
+    svm_model_path = "/media/ankurrc/new_volume/softura/facerec/code/face-trigger/pre_trained/svm_proba.pkl"
 
     source = cv2.VideoCapture(index=camera_index)
+    source.set(cv2.CAP_PROP_FRAME_WIDTH, 360)
+    source.set(cv2.CAP_PROP_FRAME_HEIGHT, 360)
+
+    print(source.get(cv2.CAP_PROP_FRAME_WIDTH), "x",
+          source.get(cv2.CAP_PROP_FRAME_HEIGHT))
     fps_counter = RepeatedTimer(interval=1.0, function=fps_count)
 
     face_detector = FaceDetector(face_area_threshold=face_area_threshold)
     landmark_detector = LandmarkDetector(
         predictor_path=face_landmark_predictor_path)
-    face_aligner = FaceAlign(
-        final_height=150, final_width=150, left_eye_offset=(0.25, 0.25))
+    # face_aligner = FaceAlign(
+    #     final_height=150, final_width=150, left_eye_offset=(0.25, 0.25))
     face_recognizer = FaceRecognizer(
         model_path=face_recognizer_model_path, svm_model_path=svm_model_path)
 
@@ -57,7 +65,7 @@ def run():
         source.open()
 
     sequence = 0
-    skip_factor = 100000
+    #skip_factor = 100000
 
     fps_counter.start()
 
@@ -76,10 +84,11 @@ def run():
         # detect the largest face
         face = face_detector.detect(grayImg)
 
-        if face:
+        if face is not None:
             sequence += 1
 
-            bb = (face.left(), face.top(), face.right(), face.bottom())
+            bb = clamp_rectangle(x1=face.left(), y1=face.top(
+            ), x2=face.right(), y2=face.bottom(), x2_max=grayImg.shape[0]-1, y2_max=grayImg.shape[1]-1)
             cv2.rectangle(frame, (bb[0], bb[1]), (bb[2], bb[3]), (255, 0, 255))
             # print("Sequence:", sequence)
 
@@ -90,12 +99,12 @@ def run():
             # get the landmarks
             landmark = landmark_detector.predict(face, grayImg)
 
-            # add face and landmarks till we get a batch of batch_size
+            # accumulate face and landmarks till we get a batch of batch_size
             if landmark is not None:
                 faces.append(grayImg[bb[0]:bb[2], bb[1]:bb[3]])
                 landmarks.append(landmark)
 
-            if sequence == batch_size:
+            if len(faces) == batch_size:
                 face_embeddings = face_recognizer.embed(
                     images=faces, landmarks=landmarks)
 
@@ -134,10 +143,13 @@ def cleanup():
     """
     global source
     global fps_counter
+    global fps_queue
 
     source.release()
     cv2.destroyAllWindows()
     fps_counter.stop()
+
+    print("Avg. FPS:", np.mean(np.array(fps_queue)))
 
 
 def start_over():
@@ -163,8 +175,10 @@ def fps_count():
     """
     global frame_count
     global fps
+    global fps_list
 
     fps = frame_count
+    fps_queue.append(fps)
     #print("FPS:", fps)
 
     frame_count = 0

@@ -1,8 +1,10 @@
 from __future__ import division
+
 import cv2
 import dlib
 import numpy
-from imutils import face_utils
+
+from utils.common import clamp_rectangle
 
 
 class FaceDetector():
@@ -32,14 +34,17 @@ class FaceDetector():
 
         faces = self.detector(gray_frame, 0)
         areas = [0 for face in faces]
-        frame_area = gray_frame.shape[0]*gray_frame.shape[1]
+        (x_max, y_max) = gray_frame.shape
+        frame_area = x_max*y_max
         # print 'frame area is (', gray_frame.shape, "):", frame_area
 
         if len(faces) > 0:
             for idx, face in enumerate(faces):
-                h, w = face.height(), face.width()
+                #h, w = face.height(), face.width()
+                x1, y1, x2, y2 = clamp_rectangle(x1=face.left(), y1=face.top(
+                ), x2=face.right(), y2=face.bottom(), x2_max=x_max-1, y2_max=y_max-1)
                 # print "Face ", idx, ":", h, w, ":", h*w
-                areas[idx] = h*w
+                areas[idx] = (x2-x1)*(y2-y1)
 
             largest_face_idx = numpy.argmax(numpy.array(areas))
 

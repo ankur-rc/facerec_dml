@@ -29,7 +29,7 @@ class LandmarkDetector:
         :param grayImg: grayscale image
         :type grayImg: numpy.ndarray
         :return landmarks: 5-tuple
-        :rtype landmarks: numpy.ndarray
+        :rtype landmarks: dlib.full_object_detection
         """
 
         shape = self.predictor(grayImg, bounding_box)

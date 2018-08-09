@@ -44,9 +44,9 @@ class FaceRecognizer():
         Generates embeddings for the given images
 
         :param images: the images to get embeddings of
-        :type images: numpy.ndarray shape: (num_images, image_height, image_width)
+        :type images: list of numpy.nadarray: (num_images, image_height, image_width)
         :param landmarks: the facial landmarks of the images
-        :type images: numpy.ndarray shape: (num_images, 5-tuple)
+        :type landmarks: list, shape: (num_images, 5, 2)
         :return embeddings: the face embeddings
         :rtype predictions: list
         """
@@ -74,6 +74,8 @@ class FaceRecognizer():
             # images = np.repeat(images, 3, axis=3)
 
             images = [cv2.cvtColor(img, cv2.COLOR_GRAY2RGB) for img in images]
+
+            assert len(images) == len(landmarks)
 
             embeddings = [self.model.compute_face_descriptor(
                 image, landmarks[i]) for i, image in enumerate(images)]
