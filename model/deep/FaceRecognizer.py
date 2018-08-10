@@ -12,7 +12,8 @@ from sklearn.metrics import accuracy_score
 from sklearn.externals import joblib
 
 """
-Trains a face recognition model based on deep metric learning for the given dataset and algorithm
+Trains a face recognition model based on deep metric learning.
+https://arxiv.org/abs/1503.03832
 """
 
 
@@ -122,9 +123,15 @@ class FaceRecognizer():
 
         return precision_perc
 
-    def save(self, name):
+    def save(self, model_path):
+        """
+        Save the trained classifier. 
+        Call only after fitting the embeddings, otherwise will throw an exception.
 
-        raise NotImplementedError()
+        :param model_path: path along with name specifiying where to save the model. Extension should be .pkl for brevity.
+        :type model_path: string 
+        """
+        joblib.dump(self.svc, model_path)
 
     def load(self, model_path):
         """
@@ -136,7 +143,7 @@ class FaceRecognizer():
 
         self.svc = joblib.load(model_path)
 
-    def infer(self, embeddings, threshold=0.20):
+    def infer(self, embeddings, threshold=0.20, unknown_index=-1):
         """
         Infer and return a predicted face identity.
 
@@ -144,20 +151,30 @@ class FaceRecognizer():
         :type embeddings: list
         :param threshold: probability threshold to accept a prediction result
         :type threshold: float
+        :param unknown_index: a integer id that denotes an unknown class
+        :type unknown_index: int
         :return: an identity
         :rtype: int
         """
 
+        unknown = unknown_index
+
+        # get prediction probabilities across all classes for each sample
         predictions = self.svc.predict_proba(np.array(embeddings))
+
+        # get the index of the highest predicted class
         prediction_indices = np.argmax(predictions, axis=1)
-        #print predictions.shape
+        # get the probability of the highest predicted class
         prediction_probabilities = np.max(predictions, axis=1)
+
+        # get the boolean mask for all indices that have a probability less than the threshold value
         thresholded_probabilities = prediction_probabilities < threshold
+        # extract the indices from the boolean mask
         thresholded_indices = np.nonzero(thresholded_probabilities)
-        prediction_indices[thresholded_indices] = -1
+        # set the indices below the threshold to belong to an unknown class
+        prediction_indices[thresholded_indices] = unknown
 
-        #print predictions
+        # get the index that occured the most in the batch that was evaluated
+        predicted_identity = np.max(prediction_indices)
 
-        identity_predicted = np.max(prediction_indices)
-
-        return identity_predicted
+        return predicted_identity
