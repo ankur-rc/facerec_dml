@@ -9,9 +9,7 @@ import numpy as np
 from collections import deque
 
 from model.deep.FaceRecognizer import FaceRecognizer
-from process.FaceDetector import FaceDetector
-from process.post_process.FaceAlign import FaceAlign
-from process.post_process.LandmarkDetector import LandmarkDetector
+from process.post_process import FaceDetector, LandmarkDetector, FaceAlign
 from utils.common import RepeatedTimer, clamp_rectangle
 
 

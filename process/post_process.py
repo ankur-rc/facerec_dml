@@ -1,11 +1,12 @@
-import dlib
-from imutils import face_utils
+from __future__ import absolute_import
+from __future__ import division
+from __future__ import print_function
+
 import cv2
-from LandmarkDetector import LandmarkDetector
-import numpy as np
-import imutils
-import os
-import shutil
+import dlib
+import numpy
+
+from utils.common import clamp_rectangle, shape_to_np
 
 FACE_LANDMARK_INDICES = {
     "reye_right": 0,
@@ -16,9 +17,89 @@ FACE_LANDMARK_INDICES = {
 }
 
 
+class FaceDetector():
+
+    """
+    HOG-based frontal face detector class.
+    """
+
+    def __init__(self, face_area_threshold=0.25):
+        """
+        Initialise a 'FaceDetector' object
+
+        :param face_area_threshold: minimum area the face must cover w.r.t the frame
+        :type largest_only: float [0,1]
+        """
+
+        self.detector = dlib.get_frontal_face_detector()
+        self.face_area_threshold = face_area_threshold
+
+    def detect(self, gray_frame):
+        """
+        Detect faces in the frame
+
+        :param gray_frame: grayscale image that might include a face
+        :type gray_frame: numpy.ndarray
+        :return bounding_box: bounding box coordinates signifying the location of the face
+        :rtype bounding_box: dlib.rectangle
+        """
+
+        bounding_box = None
+
+        faces = self.detector(gray_frame, 0)
+        areas = [0 for face in faces]
+        (x_max, y_max) = gray_frame.shape
+        frame_area = x_max*y_max
+        # print 'frame area is (', gray_frame.shape, "):", frame_area
+
+        if len(faces) > 0:
+            for idx, face in enumerate(faces):
+                #h, w = face.height(), face.width()
+                x1, y1, x2, y2 = clamp_rectangle(x1=face.left(), y1=face.top(
+                ), x2=face.right(), y2=face.bottom(), x2_max=x_max-1, y2_max=y_max-1)
+                # print "Face ", idx, ":", h, w, ":", h*w
+                areas[idx] = (x2-x1)*(y2-y1)
+
+            largest_face_idx = numpy.argmax(numpy.array(areas))
+
+            # print "Areas are:", areas
+            # print "Largest face area index:", largest_face_idx
+            # print "Face area ratio:", areas[largest_face_idx]/frame_area
+
+            if areas[largest_face_idx]/frame_area > self.face_area_threshold:
+                bounding_box = faces[largest_face_idx]
+
+        return bounding_box
+
+
+if __name__ == "__main__":
+
+    detector = FaceDetector(face_area_threshold=0.001)
+    file = "groupie.jpg"
+
+    frame = cv2.imread(file)
+    gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+    gray = cv2.equalizeHist(gray)
+
+    face = detector.detect(gray)
+
+    if face:
+        bb = (face.left(), face.top(), face.right(), face.bottom())
+        cv2.rectangle(gray, (bb[0], bb[1]), (bb[2], bb[3]), (255, 0, 255))
+        # cv2.putText(gray, str(idx), (bb[0]-3, bb[1]-3),
+        #             cv2.FONT_HERSHEY_COMPLEX, 0.5, (0, 0, 0))
+
+    cv2.imshow("op", gray)
+
+    if cv2.waitKey():
+        cv2.destroyAllWindows()
+
+
 class FaceAlign():
     """
     Align a face by performing affine transformations.
+    Inspired from 'Face Alignment with OpenCV and Python'
+    https://www.pyimagesearch.com/2017/05/22/face-alignment-with-opencv-and-python/
     """
 
     def __init__(self, left_eye_offset=(0.35, 0.35), final_width=256, final_height=None):
@@ -56,7 +137,7 @@ class FaceAlign():
         :rtype: numpy.ndarray
         """
 
-        landmarks = face_utils.shape_to_np(landmarks)
+        landmarks = shape_to_np(landmarks)
 
         # eye centers
         leye = tuple(np.add(landmarks[FACE_LANDMARK_INDICES["leye_right"]],
@@ -96,3 +177,74 @@ class FaceAlign():
             img, transform_matrix, (self.final_width, self.final_height), flags=cv2.INTER_CUBIC)
 
         return aligned_face
+
+    class LandmarkDetector:
+
+    """
+        A landmark detector that annotates face bounding boxes with 5 landmarks
+    """
+
+    def __init__(self, predictor_path="shape_predictor_5_face_landmarks.dat"):
+        """
+        Instantiates the 'LandmarkDetector' object
+
+        :param predictor_path: path to trained face predictor model
+        :type predictor_path: str
+        """
+        self.predictor = dlib.shape_predictor(predictor_path)
+
+    def predict(self, bounding_box, grayImg):
+        """
+        Provides an array of tuples for facial landmarks, predicted within a bounding box
+
+        :param bounding_box: bounding box coordinates in dlib format
+        :type bounding_box: dlib.rectangle
+        :param grayImg: grayscale image
+        :type grayImg: numpy.ndarray
+        :return landmarks: 5-tuple
+        :rtype landmarks: dlib.full_object_detection
+        """
+
+        shape = self.predictor(grayImg, bounding_box)
+        #shape = face_utils.shape_to_np(shape)
+
+        return shape
+
+
+if __name__ == '__main__':
+
+    trained_model = "shape_predictor_5_face_landmarks.dat"
+    dataset_path = '../../../../datasets/cyber_extruder_ultimate'
+
+    detector = dlib.get_frontal_face_detector()
+    predictor = LandmarkDetector(trained_model)
+
+    for root, dirs, files in os.walk(dataset_path):
+        for direc in dirs:
+            path = dataset_path + os.sep + direc + os.sep + '00000%d.jpg'
+            sequence = cv2.VideoCapture(path)
+            while True:
+                ret, rgbImg = sequence.read()
+                grayImg = None
+
+                if rgbImg is None:
+                    break
+                elif rgbImg.shape[2] == 3:
+                    grayImg = cv2.cvtColor(rgbImg, cv2.COLOR_BGR2GRAY)
+                else:
+                    grayImg = rgbImg
+
+                bounding_boxes = detector(grayImg, 0)
+
+                for (i, bounding_box) in enumerate(bounding_boxes):
+
+                    shape = predictor.predict(bounding_box, grayImg)
+
+                    for (x, y) in shape:
+                        cv2.circle(rgbImg, (x, y), 2, (0, 255, 0), -1)
+
+                cv2.imshow("Output", rgbImg)
+                if cv2.waitKey(500) & 0xFF == ord('q'):
+                    sequence.release()
+                    cv2.destroyAllWindows()
+                    quit()
