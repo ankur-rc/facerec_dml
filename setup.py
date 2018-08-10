@@ -131,7 +131,11 @@ setup(
     #
     # For an analysis of "install_requires" vs pip's requirements files see:
     # https://packaging.python.org/en/latest/requirements.html
-    # install_requires=[],  # Optional
+    install_requires=["dlib == 19.13.1",
+                      "numpy == 1.14.5",
+                      "opencv_python == 3.4.1.15",
+                      "tqdm == 4.23.4",
+                      "scikit_learn == 0.19.2"],  # Optional
 
     # List additional groups of dependencies here (e.g. development
     # dependencies). Users will be able to install these using the "extras"
