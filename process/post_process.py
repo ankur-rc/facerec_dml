@@ -36,7 +36,8 @@ class FaceDetector():
 
     def detect(self, gray_frame):
         """
-        Detect faces in the frame
+        Detect faces in the frame.
+        If multiple faces are detected, only the largest face taken into consideration.
 
         :param gray_frame: grayscale image that might include a face
         :type gray_frame: numpy.ndarray
@@ -47,24 +48,19 @@ class FaceDetector():
         bounding_box = None
 
         faces = self.detector(gray_frame, 0)
-        areas = [0 for face in faces]
-        (x_max, y_max) = gray_frame.shape
-        frame_area = x_max*y_max
-        # print 'frame area is (', gray_frame.shape, "):", frame_area
 
         if len(faces) > 0:
+
+            areas = [0 for face in faces]
+            (x_max, y_max) = gray_frame.shape
+            frame_area = x_max*y_max
+
             for idx, face in enumerate(faces):
-                #h, w = face.height(), face.width()
                 x1, y1, x2, y2 = clamp_rectangle(x1=face.left(), y1=face.top(
                 ), x2=face.right(), y2=face.bottom(), x2_max=x_max-1, y2_max=y_max-1)
-                # print "Face ", idx, ":", h, w, ":", h*w
                 areas[idx] = (x2-x1)*(y2-y1)
 
             largest_face_idx = numpy.argmax(numpy.array(areas))
-
-            # print "Areas are:", areas
-            # print "Largest face area index:", largest_face_idx
-            # print "Face area ratio:", areas[largest_face_idx]/frame_area
 
             if areas[largest_face_idx]/frame_area > self.face_area_threshold:
                 bounding_box = faces[largest_face_idx]
@@ -86,8 +82,6 @@ if __name__ == "__main__":
     if face:
         bb = (face.left(), face.top(), face.right(), face.bottom())
         cv2.rectangle(gray, (bb[0], bb[1]), (bb[2], bb[3]), (255, 0, 255))
-        # cv2.putText(gray, str(idx), (bb[0]-3, bb[1]-3),
-        #             cv2.FONT_HERSHEY_COMPLEX, 0.5, (0, 0, 0))
 
     cv2.imshow("op", gray)
 
@@ -210,6 +204,5 @@ class LandmarkDetector:
         """
 
         shape = self.predictor(grayImg, bounding_box)
-        #shape = face_utils.shape_to_np(shape)
 
         return shape
