@@ -8,9 +8,11 @@ import traceback
 import numpy as np
 from collections import deque
 
-from model.deep.FaceRecognizer import FaceRecognizer
-from process.post_process import FaceDetector, LandmarkDetector, FaceAlign
-from utils.common import RepeatedTimer, clamp_rectangle
+import face_trigger
+
+from face_trigger.model.deep.FaceRecognizer import FaceRecognizer
+from face_trigger.process.post_process import FaceDetector, LandmarkDetector, FaceAlign
+from face_trigger.utils.common import RepeatedTimer, clamp_rectangle
 
 
 source = None  # reference to cv2.VideoCapture object
@@ -44,9 +46,9 @@ def run():
     face_recognition_confidence_threshold = 0.25
     frame_skip_factor = 3
 
-    face_landmark_predictor_path = "/media/ankurrc/new_volume/softura/facerec/code/face-trigger/pre_trained/shape_predictor_5_face_landmarks.dat"
-    face_recognizer_model_path = "/media/ankurrc/new_volume/softura/facerec/code/face-trigger/pre_trained/dlib_face_recognition_resnet_model_v1.dat"
-    svm_model_path = "/media/ankurrc/new_volume/softura/facerec/code/face-trigger/pre_trained/svm_proba.pkl"
+    face_landmark_predictor_path = "/media/ankurrc/new_volume/softura/facerec/code/face-trigger/face_trigger/pre_trained/shape_predictor_5_face_landmarks.dat"
+    face_recognizer_model_path = "/media/ankurrc/new_volume/softura/facerec/code/face-trigger/face_trigger/pre_trained/dlib_face_recognition_resnet_model_v1.dat"
+    svm_model_path = "/media/ankurrc/new_volume/softura/facerec/code/face-trigger/face_trigger/pre_trained/svm_proba.pkl"
 
     source = cv2.VideoCapture(index=camera_index)
     source.set(cv2.CAP_PROP_FRAME_WIDTH, 360)

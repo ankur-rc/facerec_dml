@@ -7,7 +7,7 @@ import cv2
 import tqdm
 import numpy as np
 
-from Dataset import Dataset
+from face_trigger.model.Dataset import Dataset
 
 """
 Trains a face recognition model based on the given dataset and algorithm

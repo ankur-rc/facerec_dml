@@ -135,7 +135,8 @@ setup(
                       "numpy == 1.14.5",
                       "opencv_python == 3.4.1.15",
                       "tqdm == 4.23.4",
-                      "scikit_learn == 0.19.2"],  # Optional
+                      "scikit_learn == 0.19.1",
+                      "scipy == 1.1.0"],  # Optional
 
     # List additional groups of dependencies here (e.g. development
     # dependencies). Users will be able to install these using the "extras"
@@ -156,7 +157,7 @@ setup(
     # If using Python 2.6 or earlier, then these have to be included in
     # MANIFEST.in as well.
     package_data={  # Optional
-        'src': ['pre-trained/*.dat'],
+        'face_trigger': ['pre-trained/*.dat'],
     },
 
     # Although 'package_data' is the preferred approach, in some case you may

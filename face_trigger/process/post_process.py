@@ -6,7 +6,7 @@ import cv2
 import dlib
 import numpy
 
-from utils.common import clamp_rectangle, shape_to_np
+from face_trigger.utils.common import clamp_rectangle, shape_to_np
 
 FACE_LANDMARK_INDICES = {
     "reye_right": 0,
