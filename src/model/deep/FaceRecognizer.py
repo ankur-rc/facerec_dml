@@ -1,10 +1,13 @@
+from __future__ import absolute_import
 from __future__ import division
+from __future__ import print_function
+
 import os
 import tqdm
 import numpy as np
 import dlib
-import imutils
 import cv2
+import sklearn
 
 from sklearn.preprocessing import LabelEncoder
 from sklearn.svm import LinearSVC

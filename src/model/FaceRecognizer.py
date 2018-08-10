@@ -62,8 +62,8 @@ class FaceRecognizer():
 
         precision_perc = true_positive/len(predictions)*100
 
-        print "Precision@1:", true_positive, "/", len(
-            predictions), "(", precision_perc, "%)"
+        print("Precision@1:", true_positive, "/", len(
+            predictions), "(", precision_perc, "%)")
 
     def save(self, name):
 
