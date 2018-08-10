@@ -53,7 +53,7 @@ def run():
 
     print(source.get(cv2.CAP_PROP_FRAME_WIDTH), "x",
           source.get(cv2.CAP_PROP_FRAME_HEIGHT))
-    fps_counter = RepeatedTimer(interval=2.0, function=fps_count)
+    fps_counter = RepeatedTimer(interval=1.0, function=fps_count)
 
     # reference to face detector
     face_detector = FaceDetector(face_area_threshold=face_area_threshold)
@@ -182,7 +182,7 @@ def fps_count():
     global fps
     global fps_list
 
-    fps = frame_count
+    fps = frame_count/1.0
     fps_queue.append(fps)
 
     frame_count = 0
