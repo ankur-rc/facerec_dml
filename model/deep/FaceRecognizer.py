@@ -24,12 +24,12 @@ class FaceRecognizer():
         """
 
         self.model = dlib.face_recognition_model_v1(model_path)
-        if shape_predictor_path:
+        if shape_predictor_path is not None:
             self.shape_predictor = dlib.shape_predictor(shape_predictor_path)
         else:
             self.shape_predictor = None
 
-        if svm_model_path:
+        if svm_model_path is not None:
             self.load(svm_model_path)
 
     def train(self):
@@ -127,10 +127,26 @@ class FaceRecognizer():
         raise NotImplementedError()
 
     def load(self, model_path):
+        """
+        Load the saved classifier model.
+
+        :param model_path: path to the trained classifier model
+        :type model_path: string
+        """
 
         self.svc = joblib.load(model_path)
 
     def infer(self, embeddings, threshold=0.20):
+        """
+        Infer and return a predicted face identity.
+
+        :param embeddings: 128D face embeddings
+        :type embeddings: list
+        :param threshold: probability threshold to accept a prediction result
+        :type threshold: float
+        :return: an identity
+        :rtype: int
+        """
 
         predictions = self.svc.predict_proba(np.array(embeddings))
         prediction_indices = np.argmax(predictions, axis=1)
@@ -145,9 +161,3 @@ class FaceRecognizer():
         identity_predicted = np.max(prediction_indices)
 
         return identity_predicted
-
-
-if __name__ == "__main__":
-
-    recognizer = FaceRecognizer()
-    recognizer.train()
