@@ -42,6 +42,7 @@ def run():
     # width, height = 150, 150
     batch_size = 32
     face_recognition_confidence_threshold = 0.25
+    frame_skip_factor = 3
 
     face_landmark_predictor_path = "/media/ankurrc/new_volume/softura/facerec/code/face-trigger/pre_trained/shape_predictor_5_face_landmarks.dat"
     face_recognizer_model_path = "/media/ankurrc/new_volume/softura/facerec/code/face-trigger/pre_trained/dlib_face_recognition_resnet_model_v1.dat"
@@ -81,6 +82,9 @@ def run():
 
         # increment frame count; for fps calculation
         frame_count += 1
+
+        # if frame_count % frame_skip_factor != 0:
+        #     continue
 
         # convert to grayscale
         grayImg = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
