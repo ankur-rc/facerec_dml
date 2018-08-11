@@ -42,7 +42,7 @@ def run():
     face_area_threshold = 0.15
     camera_index = 0
     # width, height = 150, 150
-    batch_size = 32
+    batch_size = 10
     face_recognition_confidence_threshold = 0.25
     frame_skip_factor = 3
 
@@ -56,6 +56,8 @@ def run():
 
     print(source.get(cv2.CAP_PROP_FRAME_WIDTH), "x",
           source.get(cv2.CAP_PROP_FRAME_HEIGHT))
+
+    # init the fps counter object
     fps_counter = RepeatedTimer(interval=1.0, function=fps_count)
 
     # reference to face detector
@@ -85,8 +87,9 @@ def run():
         # increment frame count; for fps calculation
         frame_count += 1
 
-        # if frame_count % frame_skip_factor != 0:
-        #     continue
+        # only process every 'frame_skip_factor' frame
+        if not frame_count % frame_skip_factor == 0:
+            continue
 
         # convert to grayscale
         grayImg = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
@@ -186,7 +189,7 @@ def fps_count():
     """
     global frame_count
     global fps
-    global fps_list
+    global fps_queue
 
     fps = frame_count/1.0
     fps_queue.append(fps)
