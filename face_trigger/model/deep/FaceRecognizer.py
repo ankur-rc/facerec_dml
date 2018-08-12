@@ -10,6 +10,7 @@ import numpy as np
 import dlib
 import cv2
 import sklearn
+import time
 
 from sklearn.preprocessing import LabelEncoder
 from sklearn.svm import LinearSVC
@@ -89,8 +90,14 @@ class FaceRecognizer():
 
             assert len(images) == len(landmarks)
 
+            start_time = time.time()
+            self.logger.debug("Start timestamp: {}".format(start_time))
             embeddings = [self.model.compute_face_descriptor(
                 image, landmarks[i]) for i, image in enumerate(images)]
+
+            end_time = time.time()  # batch:100 s: ~1.5 sec; p:
+            self.logger.debug("End time: {}. Runtime: {}".format(
+                end_time, (end_time-start_time)))
 
         return embeddings
 
@@ -136,11 +143,11 @@ class FaceRecognizer():
 
     def save(self, model_path):
         """
-        Save the trained classifier. 
+        Save the trained classifier.
         Call only after fitting the embeddings, otherwise will throw an exception.
 
         :param model_path: path along with name specifiying where to save the model. Extension should be .pkl for brevity.
-        :type model_path: string 
+        :type model_path: string
         """
         joblib.dump(self.svc, model_path)
 
@@ -165,7 +172,7 @@ class FaceRecognizer():
         :param unknown_index: a integer id that denotes an unknown class
         :type unknown_index: int
         :param in_parallel: flag to indicate whethetr to run inference in parallel among cpu cores
-        :typr in_parallel: bool 
+        :typr in_parallel: bool
         :returns: an identity
         :rtype: int
         """

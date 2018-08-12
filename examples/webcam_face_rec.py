@@ -7,6 +7,7 @@ import time
 import traceback
 import numpy as np
 from collections import deque
+import logging
 
 import face_trigger
 
@@ -31,6 +32,8 @@ def run():
     Main loop of the program
     """
 
+    logger = logging.getLogger(__name__)
+
     global frame_count
     global source
     global fps_counter
@@ -43,7 +46,7 @@ def run():
     camera_index = 0
     cam_height, cam_width = 360, 360
     # width, height = 150, 150
-    batch_size = 10
+    batch_size = 5
     face_recognition_confidence_threshold = 0.25
     frame_skip_factor = 3
 
@@ -124,11 +127,18 @@ def run():
 
             # recognize the face in the batch
             if len(faces) == batch_size:
+                start_time = time.time()
+                logger.debug("Start timestamp: {}".format(start_time))
+
                 face_embeddings = face_recognizer.embed(
                     images=faces, landmarks=landmarks)
 
                 predicted_identity = face_recognizer.infer(
                     face_embeddings, threshold=face_recognition_confidence_threshold)
+
+                end_time = time.time()  # batch:100 s: ~1.5 sec; p:
+                logger.debug("End time: {}. Runtime: {}".format(
+                    end_time, (end_time-start_time)))
 
                 print("Predicted identity:", predicted_identity)
 
@@ -198,7 +208,11 @@ def fps_count():
     frame_count = 0
 
 
+import logging
 if __name__ == "__main__":
+
+    logging.basicConfig(level=logging.INFO)
+
     try:
         run()
     except Exception as e:
