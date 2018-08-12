@@ -1,121 +1,141 @@
+from __future__ import absolute_import
+from __future__ import division
+from __future__ import print_function
+
+import logging
+
 import os
 import random
 import shutil
 import tqdm as pbar
 import numpy as np
 import cv2
-
-
-"""
-A class for performing various operations on a dataset
-"""
+import uuid
 
 
 class Dataset():
 
-    def __init__(self, dataset_path):
+    """
+    A class for performing various operations on a dataset
+    """
+
+    def __init__(self, dataset_path=None, split_path=None):
         """
         Instantiate a Dataset object
 
         :param dataset_path: path to the dataset
         :type dataset_path: str
+        :param split_path: path to store the dataset train-test split information. Will rename the old directory, if it exists.
+        :type split_path: str
         """
+
+        self.logger = logging.getLogger(__name__)
 
         if not os.path.exists(os.path.realpath(dataset_path)):
             raise Exception("Invalid dataset path!")
 
-        dataset_split_path_suffix = "__train_test_split"
+        self.split_path = os.path.realpath(split_path)
+
+        if os.path.isfile(self.split_path):
+            raise Exception(
+                "A file with the same name as 'split_path' already exists. Please make sure split_path location is a valid one!")
+
+        if os.path.isdir(self.split_path):
+            os.rename(self.split_path, os.path.join(os.path.split(
+                self.split_path)[0], os.path.split(
+                self.split_path)[1] + "_" + str(uuid.uuid4().get_hex())))
+        os.makedirs(self.split_path)
 
         self.dataset_path = os.path.realpath(dataset_path)
-        self.dataset_split = os.path.basename(
-            dataset_path)+dataset_split_path_suffix
 
-    def clear_splits(self):
-        if os.path.exists(self.dataset_split):
-            print "Removing stale directory:", self.dataset_split, "..."
-            shutil.rmtree(self.dataset_split)
-            print "done."
-
-    def split(self, num_train=2, fold=1):
+    def split(self, num_train_list=None, folds=1):
         """
         Generates a train-test split based on the number of training samples
 
-        :param num_train: number of training samples per split
-        :type num_train: int
-        :param fold: the fold the split belongs to
+        :param num_train_list: number of training samples per fold
+        :type num_train_list: list of inttegers
+        :param fold: total number of folds
         :type fold: int
         """
 
-        # if os.path.exists(os.path.join(self.dataset_split, str(num_train))):
-        #     # print "Removing stale directory:", self.dataset_split, "..."
-        #     shutil.rmtree(os.path.join(self.dataset_split, str(num_train)))
-        #     # print "done."
+        if not isinstance(num_train_list, list):
+            raise Exception("num_train_list should be a list!")
 
-        # print "Creating directory:", os.path.join(
-        #     self.dataset_split, str(num_train)), "..."
-        # os.makedirs(os.path.join(self.dataset_split, str(num_train)))
-        # print "done."
+        train_file_suffix = "train.csv"
+        test_file_suffix = "test.csv"
 
-        train_file = "train.csv"
-        test_file = "test.csv"
+        for training_sample in num_train_list:
+            self.logger.info(
+                "Generating for {0:d} training samples per subject.".format(training_sample))
 
-        fold_path = self.dataset_split + os.sep + \
-            str(num_train) + os.path.sep + str(fold)
-        if os.path.exists(fold_path):
-            # print "Removing stale directory:", fold_path, "..."
-            shutil.rmtree(fold_path)
-            # print "done."
+            for i in pbar.trange(1, folds+1):
 
-        # print "Creating directory:", fold_path, "..."
-        os.makedirs(fold_path)
-        # print "done."
+                pbar.tqdm.write("Generating: Fold {0:d}".format(i))
 
-        bar = pbar.tqdm(total=int(9e9))
-        subjects = 0
-        rejected_dirs = []
+                fold_path = os.path.join(
+                    self.split_path, str(training_sample), str(i))
 
-        with open(fold_path+os.sep+train_file, "a+") as train, \
-                open(fold_path + os.sep + test_file, "a+") as test:
+                pbar.tqdm.write("Creating directory: {0}".format(fold_path))
+                os.makedirs(fold_path)
+                pbar.tqdm.write("done.")
 
-            for root, dirs, files in os.walk(self.dataset_path):
+                train_file = os.path.join(fold_path, train_file_suffix)
+                test_file = os.path.join(fold_path, test_file_suffix)
 
-                if root != self.dataset_path:
-                    bar.set_description("Dir-->" + os.path.basename(root))
-                    # seed = fold*i
-                    random.Random().shuffle(files)
+                pbar.tqdm.write(train_file)
 
-                    bar.update()
+                bar = pbar.tqdm(total=int(9e9))
+                subjects = 0
+                rejected_dirs = []
 
-                    if len(files) - 1 < num_train:
-                        rejected_dirs.append(os.path.basename(root))
-                        continue
+                with open(train_file, "a+") as train, \
+                        open(test_file, "a+") as test:
 
-                    subjects += 1
+                    for root, dirs, files in os.walk(self.dataset_path):
 
-                    train_split = files[0:num_train]
-                    test_split = files[num_train:]
+                        # here root denotes the folder indicating the user id
+                        if root != self.dataset_path:
+                            bar.set_description(
+                                "Dir-->" + os.path.basename(root))
+                            random.Random().shuffle(files)
 
-                    train_sample = os.path.basename(root) + ", " + \
-                        reduce(lambda l, s: l + ", " +
-                               s, train_split) + "\n"
+                            bar.update()
 
-                    test_sample = os.path.basename(root) + ", " + \
-                        reduce(lambda l, s: l + ", " +
-                               s, test_split) + "\n"
+                            if len(files) - 1 < training_sample:
+                                rejected_dirs.append(os.path.basename(root))
+                                continue
 
-                    train.write(train_sample)
-                    test.write(test_sample)
+                            subjects += 1
 
-                elif root == self.dataset_path:
-                    bar.total = len(dirs)
+                            train_split = files[0:training_sample]
+                            test_split = files[training_sample:]
 
-            bar.close()
+                            # create csv entry as user id, file1, file2...
+                            train_sample = os.path.basename(root) + ", " + \
+                                reduce(lambda l, s: l + ", " +
+                                       s, train_split) + "\n"
 
-        if len(rejected_dirs) > 0:
-            print "The following directories were rejected: ", rejected_dirs
-        print "We have", subjects, "subjects in our dataset."
+                            test_sample = os.path.basename(root) + ", " + \
+                                reduce(lambda l, s: l + ", " +
+                                       s, test_split) + "\n"
 
-    def load_data(self, is_train, num_train, fold):
+                            train.write(train_sample)
+                            test.write(test_sample)
+
+                        elif root == self.dataset_path:
+                            bar.total = len(dirs)
+
+                    bar.close()
+
+                i += 1
+
+            if len(rejected_dirs) > 0:
+                self.logger.info(
+                    "The following directories were rejected: {}".format(rejected_dirs))
+            self.logger.info(
+                "We have {0:d} subjects in our dataset.".format(subjects))
+
+    def load_data(self, is_train=None, num_train=None, fold=None):
         """
         Gets the test or train data
 
@@ -129,7 +149,7 @@ class Dataset():
         :rtype test data: (numpy.ndarray, numpy.ndarray)
         """
 
-        if not os.path.exists(self.dataset_split):
+        if not os.path.exists(self.split_path):
             raise Exception(
                 "Dataset test-train split has not been generated, yet! Please run split() before loading data.")
 
@@ -148,8 +168,8 @@ class Dataset():
         else:
             suffix = "test.csv"
 
-        csv_file = self.dataset_split + os.path.sep + \
-            str(num_train) + os.path.sep + str(fold) + os.path.sep + suffix
+        csv_file = os.path.join(
+            self.split_path, str(num_train), str(fold), suffix)
         X = []
         y = []
 
@@ -178,18 +198,19 @@ class Dataset():
 
 
 if __name__ == "__main__":
-    dataset = Dataset("../../../datasets/norm_cyber_extruder_ultimate")
+
+    logging.basicConfig(level=logging.DEBUG)
+    logger = logging.getLogger(__name__)
+
+    dataset = Dataset(dataset_path="/media/ankurrc/new_volume/softura/facerec/datasets/norm_standard_att",
+                      split_path="/media/ankurrc/new_volume/softura/facerec/split_path")
     folds = 3
     training_samples = [2, 5, 8]
 
-    dataset.clear_splits()
-    for training_sample in training_samples:
-        print "Generating for", training_sample, "training samples per subject"
-        for i in range(1, folds+1):
-            print "Generating: Fold", i
-            dataset.split(num_train=training_sample, fold=i)
+    dataset.split(num_train_list=training_samples, folds=3)
 
-    X_train, y_train = dataset.load_data(is_train=True, fold=1, num_train=2)
-    X_test, y_test = dataset.load_data(is_train=False, fold=1, num_train=2)
+    # X_train, y_train = dataset.load_data(is_train=True, fold=1, num_train=5)
+    # X_test, y_test = dataset.load_data(is_train=False, fold=1, num_train=5)
 
-    print len(X_train), y_train.shape, X_train[0].shape
+    # logger.info("len(X_train): {0}, y_train.shape: {1}, x_train[0].shape: {2}".format(
+    #     len(X_train), y_train.shape, X_train[0].shape))

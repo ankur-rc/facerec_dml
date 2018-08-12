@@ -41,6 +41,7 @@ def run():
 
     face_area_threshold = 0.15
     camera_index = 0
+    cam_height, cam_width = 360, 360
     # width, height = 150, 150
     batch_size = 10
     face_recognition_confidence_threshold = 0.25

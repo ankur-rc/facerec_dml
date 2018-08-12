@@ -2,6 +2,8 @@ from __future__ import absolute_import
 from __future__ import division
 from __future__ import print_function
 
+import logging
+
 import cv2
 import dlib
 import numpy
@@ -28,16 +30,17 @@ class FaceDetector():
         Initialise a 'FaceDetector' object
 
         :param face_area_threshold: minimum area the face must cover w.r.t the frame
-        :type largest_only: float [0,1]
+        :type face_area_threshold: float [0,1]
         """
 
         self.detector = dlib.get_frontal_face_detector()
         self.face_area_threshold = face_area_threshold
+        self.logger = logging.getLogger(__name__)
 
     def detect(self, gray_frame):
         """
         Detect faces in the frame.
-        If multiple faces are detected, only the largest face taken into consideration.
+        If multiple faces are detected, only the largest face is taken into consideration.
 
         :param gray_frame: grayscale image that might include a face
         :type gray_frame: numpy.ndarray
@@ -68,35 +71,13 @@ class FaceDetector():
         return bounding_box
 
 
-if __name__ == "__main__":
+class FaceAlign():
 
-    detector = FaceDetector(face_area_threshold=0.001)
-    file = "groupie.jpg"
-
-    frame = cv2.imread(file)
-    gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
-    gray = cv2.equalizeHist(gray)
-
-    face = detector.detect(gray)
-
-    if face:
-        bb = (face.left(), face.top(), face.right(), face.bottom())
-        cv2.rectangle(gray, (bb[0], bb[1]), (bb[2], bb[3]), (255, 0, 255))
-
-    cv2.imshow("op", gray)
-
-    if cv2.waitKey():
-        cv2.destroyAllWindows()
-
-
-"""
+    """
     Align a face by performing affine transformations.
     Inspired from 'Face Alignment with OpenCV and Python'
     https://www.pyimagesearch.com/2017/05/22/face-alignment-with-opencv-and-python/
-"""
-
-
-class FaceAlign():
+    """
 
     def __init__(self, left_eye_offset=(0.35, 0.35), final_width=256, final_height=None):
         """
@@ -117,6 +98,8 @@ class FaceAlign():
             self.final_height = final_width
         else:
             self.final_height = final_height
+
+        self.logger = logging.getLogger(__name__)
 
     def align(self, img, landmarks):
         """
@@ -175,12 +158,11 @@ class FaceAlign():
         return aligned_face
 
 
-"""
-        A landmark detector that annotates face bounding boxes with 5 landmarks
-"""
-
-
 class LandmarkDetector:
+
+    """
+        A landmark detector that annotates face bounding boxes with 5 landmarks
+    """
 
     def __init__(self, predictor_path="shape_predictor_5_face_landmarks.dat"):
         """
@@ -190,6 +172,7 @@ class LandmarkDetector:
         :type predictor_path: str
         """
         self.predictor = dlib.shape_predictor(predictor_path)
+        self.logger = logging.getLogger(__name__)
 
     def predict(self, bounding_box, grayImg):
         """

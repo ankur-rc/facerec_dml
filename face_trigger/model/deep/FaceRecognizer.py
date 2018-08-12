@@ -2,6 +2,8 @@ from __future__ import absolute_import
 from __future__ import division
 from __future__ import print_function
 
+import logging
+
 import os
 import tqdm
 import numpy as np
@@ -15,12 +17,16 @@ from sklearn.metrics import accuracy_score
 from sklearn.externals import joblib
 
 """
-Trains a face recognition model based on deep metric learning.
-https://arxiv.org/abs/1503.03832
+Deep Learning based face recognition module.
 """
 
 
 class FaceRecognizer():
+
+    """
+    Trains a face recognition model based on deep metric learning.
+    https://arxiv.org/abs/1503.03832
+    """
 
     def __init__(self, model_path="dlib_face_recognition_resnet_model_v1.dat", shape_predictor_path=None, svm_model_path=None):
         """
@@ -35,6 +41,8 @@ class FaceRecognizer():
 
         if svm_model_path is not None:
             self.load(svm_model_path)
+
+        self.logger = logging.getLogger(__name__)
 
     def train(self):
         """
@@ -146,7 +154,7 @@ class FaceRecognizer():
 
         self.svc = joblib.load(model_path)
 
-    def infer(self, embeddings, threshold=0.20, unknown_index=-1):
+    def infer(self, embeddings, threshold=0.20, unknown_index=-1, in_parallel=False):
         """
         Infer and return a predicted face identity.
 
@@ -156,6 +164,8 @@ class FaceRecognizer():
         :type threshold: float
         :param unknown_index: a integer id that denotes an unknown class
         :type unknown_index: int
+        :param in_parallel: flag to indicate whethetr to run inference in parallel among cpu cores
+        :typr in_parallel: bool 
         :return: an identity
         :rtype: int
         """
