@@ -52,8 +52,8 @@ def run():
     svm_model_path = "/media/ankurrc/new_volume/softura/facerec/code/face-trigger/face_trigger/pre_trained/svm_proba.pkl"
 
     source = cv2.VideoCapture(index=camera_index)
-    source.set(cv2.CAP_PROP_FRAME_WIDTH, 360)
-    source.set(cv2.CAP_PROP_FRAME_HEIGHT, 360)
+    source.set(cv2.CAP_PROP_FRAME_WIDTH, cam_width)
+    source.set(cv2.CAP_PROP_FRAME_HEIGHT, cam_height)
 
     print(source.get(cv2.CAP_PROP_FRAME_WIDTH), "x",
           source.get(cv2.CAP_PROP_FRAME_HEIGHT))

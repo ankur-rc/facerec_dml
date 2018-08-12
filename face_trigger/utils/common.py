@@ -23,7 +23,7 @@ def clamp_rectangle(x1=None, y1=None, x2=None, y2=None, x1_min=0, y1_min=0, x2_m
     :type x2: int
     :param y2: the bottommost possible y-coordinate
     :type y2: int
-    :return: clamped coordinates (x1_clamped, y1_clamped, x2_clamped, y2_clamped)
+    :returns: clamped coordinates (x1_clamped, y1_clamped, x2_clamped, y2_clamped)
     :rtype: 4-tuple
     """
 
@@ -36,7 +36,7 @@ def shape_to_np(shape, dtype="int"):
 
     :param shape: a dlib.shape object
     :type shape: dlib.shape 
-    :return: converted numpy array 
+    :returns: converted numpy array 
     :rtype: numpy.array
     """
 

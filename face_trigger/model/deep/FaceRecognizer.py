@@ -59,8 +59,8 @@ class FaceRecognizer():
         :type images: list of numpy.nadarray: (num_images, image_height, image_width)
         :param landmarks: the facial landmarks of the images
         :type landmarks: list, shape: (num_images, 5, 2)
-        :return embeddings: the face embeddings
-        :rtype predictions: list
+        :returns: the face embeddings
+        :rtype: list
         """
 
         embeddings = []
@@ -166,7 +166,7 @@ class FaceRecognizer():
         :type unknown_index: int
         :param in_parallel: flag to indicate whethetr to run inference in parallel among cpu cores
         :typr in_parallel: bool 
-        :return: an identity
+        :returns: an identity
         :rtype: int
         """
 

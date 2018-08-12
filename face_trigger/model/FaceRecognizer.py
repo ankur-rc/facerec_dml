@@ -9,8 +9,6 @@ import cv2
 import tqdm
 import numpy as np
 
-from face_trigger.model.Dataset import Dataset
-
 """
 LBPH-based Face recognition module
 """
@@ -48,8 +46,8 @@ class FaceRecognizer():
 
         :param images: the images to test on
         :type images: numpy.ndarray shape: (num_images, image_height, image_width)
-        :return predictions: the predicted labels
-        :rtype predictions: array
+        :returns: the predicted labels
+        :rtype: array
         """
 
         predictions = []

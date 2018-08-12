@@ -44,8 +44,8 @@ class FaceDetector():
 
         :param gray_frame: grayscale image that might include a face
         :type gray_frame: numpy.ndarray
-        :return bounding_box: bounding box coordinates signifying the location of the face
-        :rtype bounding_box: dlib.rectangle
+        :returns: bounding box coordinates signifying the location of the face
+        :rtype: dlib.rectangle
         """
 
         bounding_box = None
@@ -112,7 +112,7 @@ class FaceAlign():
         :type img: numpy.ndarray
         :landmarks: the x,y-coordinates of the facial landmarks
         :type landmarks: dlib shape
-        :return aligned_img: aligned image of final dimensions
+        :returns: aligned image of final dimensions
         :rtype: numpy.ndarray
         """
 
@@ -182,8 +182,8 @@ class LandmarkDetector:
         :type bounding_box: dlib.rectangle
         :param grayImg: grayscale image
         :type grayImg: numpy.ndarray
-        :return landmarks: 5-tuple
-        :rtype landmarks: dlib.full_object_detection
+        :returns: 5-tuple
+        :rtype: dlib.full_object_detection
         """
 
         shape = self.predictor(grayImg, bounding_box)
