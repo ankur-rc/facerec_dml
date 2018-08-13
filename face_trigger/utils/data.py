@@ -210,9 +210,9 @@ class Dataset():
         return X, y
 
 
-def normalize_dataset(dataset_path=None, output_path=None):
+def dataset_filter(dataset_path=None):
     """
-    Normalize the dataset by:
+    Filter the dataset by:
     1. A face is detected in the image. If no face or more than one face is detected, the image is rejected.
     2. For each detected face, 5-landmarks are detected. If landmarks are not detected, image is rejected.
     3. Image is aligned, based on the landmarks.
@@ -231,7 +231,7 @@ def normalize_dataset(dataset_path=None, output_path=None):
     >>> dataset_path = "/media/ankurrc/new_volume/softura/facerec/datasets/standard_att_copy"
     >>> output_path = "/media/ankurrc/new_volume/softura/facerec/att_norm"
 
-    >>> normalize_dataset(
+    >>> dataset_filter(
         dataset_path=dataset_path, output_path=output_path)
     """
 
@@ -248,22 +248,10 @@ def normalize_dataset(dataset_path=None, output_path=None):
     if not os.path.exists(dataset_path):
         raise Exception("Invalid dataset path!")
 
-    # setup output directory
-    if os.path.isdir(output_path):
-        os.rename(output_path, os.path.join(os.path.split(
-            output_path)[0], os.path.split(
-            output_path)[1] + "_" + str(uuid.uuid4().get_hex())))
-    os.makedirs(output_path)
-
     for root, dirs, files in os.walk(dataset_path):
 
         if root == dataset_path:
             bar.total = len(dirs)
-
-        for direc in dirs:
-            # create output directory for this presonality
-            output_direc_path = os.path.join(output_path, direc)
-            os.mkdir(output_direc_path)
 
         for img in files:
 
@@ -291,18 +279,9 @@ def normalize_dataset(dataset_path=None, output_path=None):
                 # get the landmarks
                 landmarks = landmark_predictor.predict(face_bb, grayImg)
 
-                if landmarks is not None:
+                # reject this image in case no landmarks found
+                if landmarks is None:
 
-                    # align the face
-                    aligned_face = face_align.align(grayImg, landmarks)
-
-                    # write to output directory
-                    save_path = os.path.join(
-                        output_path, os.path.basename(root), img)
-
-                    cv2.imwrite(save_path, aligned_face)
-
-                else:
                     root = os.path.basename(root)
                     if root in rejected_faces:
                         rejected_faces[root].append(img)
@@ -320,7 +299,6 @@ def normalize_dataset(dataset_path=None, output_path=None):
             bar.update()
 
     bar.close()
-    logger.info("Normalized dataset created at {}".format(output_path))
 
     print("Rejected directories:")
     pprint.pprint(rejected_faces)
