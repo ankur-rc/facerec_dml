@@ -6,7 +6,7 @@ import logging
 
 import cv2
 import dlib
-import numpy
+import numpy as np
 import pkg_resources
 
 from face_trigger.utils.common import clamp_rectangle, shape_to_np
@@ -64,7 +64,7 @@ class FaceDetector():
                 ), x2=face.right(), y2=face.bottom(), x2_max=x_max-1, y2_max=y_max-1)
                 areas[idx] = (x2-x1)*(y2-y1)
 
-            largest_face_idx = numpy.argmax(numpy.array(areas))
+            largest_face_idx = np.argmax(np.array(areas))
 
             if areas[largest_face_idx]/frame_area > self.face_area_threshold:
                 bounding_box = faces[largest_face_idx]
