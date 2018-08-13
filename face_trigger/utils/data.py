@@ -315,7 +315,7 @@ def dataset_filter(dataset_path=None, output_path=None):
 
     bar.close()
 
-    logger.info("Normalized dataset created at {}".format(output_path))
+    logger.info("Filtered dataset created at {}".format(output_path))
 
     print("Rejected directories:")
     pprint.pprint(rejected_faces)
