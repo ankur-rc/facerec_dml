@@ -70,6 +70,20 @@ class FaceDetector():
 
         return bounding_box
 
+    def detect_unbounded(self, gray_frame):
+        """
+        Detect all faces in the frame
+
+        :param gray_frame: grayscale image that might faces
+        :type gray_frame: numpy.ndarray
+        :returns: bounding box coordinates signifying the location of the faces
+        :rtype: list of dlib.rectangle
+        """
+
+        faces = self.detector(gray_frame, 0)
+
+        return faces
+
 
 class FaceAlign():
 
@@ -164,7 +178,7 @@ class LandmarkDetector:
         A landmark detector that annotates face bounding boxes with 5 landmarks
     """
 
-    def __init__(self, predictor_path="shape_predictor_5_face_landmarks.dat"):
+    def __init__(self, predictor_path="../pre_trained/shape_predictor_5_face_landmarks.dat"):
         """
         Instantiates the 'LandmarkDetector' object
 
