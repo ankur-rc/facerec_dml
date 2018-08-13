@@ -210,18 +210,16 @@ class Dataset():
         return X, y
 
 
-def dataset_filter(dataset_path=None):
+def dataset_filter(dataset_path=None, output_path=None):
     """
     Filter the dataset by:
     1. A face is detected in the image. If no face or more than one face is detected, the image is rejected.
     2. For each detected face, 5-landmarks are detected. If landmarks are not detected, image is rejected.
-    3. Image is aligned, based on the landmarks.
-    4. Image is cropped.
-    5. Image is converted to grayscale, and saved in the output_path.
+    3. A new dataset is created by not including the rejected images.
 
-    :param dataset_path: path to the un-normalized dataset
+    :param dataset_path: path to the original dataset
     :type dataset_path: str
-    :param output_path: path to the save the normalized dataset
+    :param output_path: path to the filtered dataset
     :type output_path: str
     :returns: dictionary of rejected images
     :rtype: dict
@@ -238,7 +236,6 @@ def dataset_filter(dataset_path=None):
     logger = logging.getLogger(__name__)
 
     face_detector = FaceDetector()
-    face_align = FaceAlign(left_eye_offset=(0.35, 0.35), final_width=150)
     landmark_predictor = LandmarkDetector()
 
     rejected_faces = {}
@@ -248,10 +245,22 @@ def dataset_filter(dataset_path=None):
     if not os.path.exists(dataset_path):
         raise Exception("Invalid dataset path!")
 
+    # setup output directory
+    if os.path.isdir(output_path):
+        os.rename(output_path, os.path.join(os.path.split(
+            output_path)[0], os.path.split(
+            output_path)[1] + "_" + str(uuid.uuid4().get_hex())))
+    os.makedirs(output_path)
+
     for root, dirs, files in os.walk(dataset_path):
 
         if root == dataset_path:
             bar.total = len(dirs)
+
+        for direc in dirs:
+            # create output directory for this presonality
+            output_direc_path = os.path.join(output_path, direc)
+            os.mkdir(output_direc_path)
 
         for img in files:
 
@@ -287,6 +296,12 @@ def dataset_filter(dataset_path=None):
                         rejected_faces[root].append(img)
                     else:
                         rejected_faces[root] = [img]
+                else:
+                    # write to output directory
+                    save_path = os.path.join(
+                        output_path, os.path.basename(root), img)
+
+                    cv2.imwrite(save_path, rgbImg)
 
             else:
                 root = os.path.basename(root)
@@ -299,6 +314,8 @@ def dataset_filter(dataset_path=None):
             bar.update()
 
     bar.close()
+
+    logger.info("Normalized dataset created at {}".format(output_path))
 
     print("Rejected directories:")
     pprint.pprint(rejected_faces)
