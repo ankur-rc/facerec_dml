@@ -7,10 +7,14 @@ import logging
 import os
 import random
 import shutil
-import tqdm as pbar
+
 import numpy as np
 import cv2
 import uuid
+import pprint
+import tqdm
+
+from face_trigger.process.post_process import FaceDetector, LandmarkDetector, FaceAlign
 
 
 class Dataset():
@@ -77,7 +81,7 @@ class Dataset():
             self.logger.info(
                 "Generating for {0:d} training samples per subject.".format(training_sample))
 
-            for i in pbar.trange(1, folds+1):
+            for i in range(1, folds+1):
 
                 self.logger.info("Generating: Fold {0:d}".format(i))
 
@@ -206,20 +210,119 @@ class Dataset():
         return X, y
 
 
-if __name__ == "__main__":
+def normalize_dataset(dataset_path=None, output_path=None):
+    """
+    Normalize the dataset by:
+    1. A face is detected in the image. If no face or more than one face is detected, the image is rejected.
+    2. For each detected face, 5-landmarks are detected. If landmarks are not detected, image is rejected.
+    3. Image is aligned, based on the landmarks.
+    4. Image is cropped.
+    5. Image is converted to grayscale, and saved in the output_path.
 
-    logging.basicConfig(level=logging.DEBUG)
+    :param dataset_path: path to the un-normalized dataset
+    :type dataset_path: str
+    :param output_path: path to the save the normalized dataset
+    :type output_path: str
+    :returns: dictionary of rejected images
+    :rtype: dict
+
+    Example:
+    ------------------------------------------------------------------
+    >>> dataset_path = "/media/ankurrc/new_volume/softura/facerec/datasets/standard_att_copy"
+    >>> output_path = "/media/ankurrc/new_volume/softura/facerec/att_norm"
+
+    >>> normalize_dataset(
+        dataset_path=dataset_path, output_path=output_path)
+    """
+
     logger = logging.getLogger(__name__)
 
-    dataset = Dataset(dataset_path="/media/ankurrc/new_volume/softura/facerec/datasets/norm_standard_att",
-                      split_path="/media/ankurrc/new_volume/softura/facerec/split_path")
-    folds = 3
-    training_samples = [2, 5, 8]
+    face_detector = FaceDetector()
+    face_align = FaceAlign(left_eye_offset=(0.35, 0.35), final_width=150)
+    landmark_predictor = LandmarkDetector()
 
-    dataset.split(num_train_list=training_samples, folds=3)
+    rejected_faces = {}
 
-    # X_train, y_train = dataset.load_data(is_train=True, fold=1, num_train=5)
-    # X_test, y_test = dataset.load_data(is_train=False, fold=1, num_train=5)
+    bar = tqdm.tqdm(total=None)
 
-    # logger.info("len(X_train): {0}, y_train.shape: {1}, x_train[0].shape: {2}".format(
-    #     len(X_train), y_train.shape, X_train[0].shape))
+    if not os.path.exists(dataset_path):
+        raise Exception("Invalid dataset path!")
+
+    # setup output directory
+    if os.path.isdir(output_path):
+        os.rename(output_path, os.path.join(os.path.split(
+            output_path)[0], os.path.split(
+            output_path)[1] + "_" + str(uuid.uuid4().get_hex())))
+    os.makedirs(output_path)
+
+    for root, dirs, files in os.walk(dataset_path):
+
+        if root == dataset_path:
+            bar.total = len(dirs)
+
+        for direc in dirs:
+            # create output directory for this presonality
+            output_direc_path = os.path.join(output_path, direc)
+            os.mkdir(output_direc_path)
+
+        for img in files:
+
+            img_path = os.path.join(dataset_path, root, img)
+
+            # read the image
+            rgbImg = cv2.imread(img_path)
+
+            grayImg = None
+            if rgbImg is None:
+                break
+            elif rgbImg.shape[2] == 3:
+                grayImg = cv2.cvtColor(rgbImg, cv2.COLOR_BGR2GRAY)
+            else:
+                grayImg = rgbImg
+
+            # detect faces
+            faces = face_detector.detect_unbounded(grayImg)
+
+            if len(faces) == 1:
+
+                # get face (only interested if there's one and only one)
+                face_bb = faces[0]
+
+                # get the landmarks
+                landmarks = landmark_predictor.predict(face_bb, grayImg)
+
+                if landmarks is not None:
+
+                    # align the face
+                    aligned_face = face_align.align(grayImg, landmarks)
+
+                    # write to output directory
+                    save_path = os.path.join(
+                        output_path, os.path.basename(root), img)
+
+                    cv2.imwrite(save_path, aligned_face)
+
+                else:
+                    root = os.path.basename(root)
+                    if root in rejected_faces:
+                        rejected_faces[root].append(img)
+                    else:
+                        rejected_faces[root] = [img]
+
+            else:
+                root = os.path.basename(root)
+                if root in rejected_faces:
+                    rejected_faces[root].append(img)
+                else:
+                    rejected_faces[root] = [img]
+
+        if root != dataset_path:
+            bar.update()
+
+    bar.close()
+    logger.info("Normalized dataset created at {}".format(output_path))
+
+    print("Rejected directories:")
+    pprint.pprint(rejected_faces)
+
+    return rejected_faces
