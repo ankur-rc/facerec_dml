@@ -47,17 +47,21 @@ class Dataset():
         if not os.path.exists(os.path.realpath(dataset_path)):
             raise Exception("Invalid dataset path!")
 
-        self.split_path = os.path.realpath(split_path)
+        if split_path is not None:
+            self.split_path = os.path.realpath(split_path)
 
-        if os.path.isfile(self.split_path):
-            raise Exception(
-                "A file with the same name as 'split_path' already exists. Please make sure split_path location is a valid one!")
+            if os.path.isfile(self.split_path):
+                raise Exception(
+                    "A file with the same name as 'split_path' already exists. Please make sure split_path location is a valid one!")
 
-        if os.path.isdir(self.split_path):
-            os.rename(self.split_path, os.path.join(os.path.split(
-                self.split_path)[0], os.path.split(
-                self.split_path)[1] + "_" + str(uuid.uuid4().get_hex())))
-        os.makedirs(self.split_path)
+            if os.path.isdir(self.split_path):
+                os.rename(self.split_path, os.path.join(os.path.split(
+                    self.split_path)[0], os.path.split(
+                    self.split_path)[1] + "_" + str(uuid.uuid4().get_hex())))
+            os.makedirs(self.split_path)
+
+        else:
+            self.split_path = None
 
         self.dataset_path = os.path.realpath(dataset_path)
 
@@ -70,6 +74,8 @@ class Dataset():
         :param fold: total number of folds
         :type fold: int
         """
+
+        assert self.split_path is not None
 
         if not isinstance(num_train_list, list):
             raise Exception("num_train_list should be a list!")
@@ -195,7 +201,7 @@ class Dataset():
 
                 # print label, "imgs:", train_imgs
 
-                images_path = self.dataset_path + os.path.sep + label
+                images_path = os.path.join(self.dataset_path, label)
                 for image in imgs:
                     img = cv2.imread(os.path.join(
                         images_path, image.strip()), cv2.IMREAD_GRAYSCALE)
@@ -264,7 +270,7 @@ def dataset_filter(dataset_path=None, output_path=None):
 
         for img in files:
 
-            img_path = os.path.join(dataset_path, root, img)
+            img_path = os.path.join(root, img)
 
             # read the image
             rgbImg = cv2.imread(img_path)
@@ -321,3 +327,12 @@ def dataset_filter(dataset_path=None, output_path=None):
     pprint.pprint(rejected_faces)
 
     return rejected_faces
+
+
+if __name__ == "__main__":
+    logging.basicConfig(level=logging.DEBUG)
+
+    dataset = Dataset(
+        dataset_path="/media/ankurrc/new_volume/softura/facerec/att_filtered")
+
+    X, y = dataset.load_all()

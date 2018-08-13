@@ -32,25 +32,23 @@ class FaceRecognizer():
     https://arxiv.org/abs/1503.03832
     """
 
-    def __init__(self, model_path=None, shape_predictor_path=None, svm_model_path=None):
+    def __init__(self, model_path=None, svm_model_path=None):
         """
         Instantiate a FaceRecognizer object
         """
+        self.logger = logging.getLogger(__name__)
 
         if model_path is None:
             model_path = pkg_resources.resource_filename(
                 "face_trigger", "pre_trained/dlib_face_recognition_resnet_model_v1.dat")
 
         self.model = dlib.face_recognition_model_v1(model_path)
-        if shape_predictor_path is not None:
-            self.shape_predictor = dlib.shape_predictor(shape_predictor_path)
-        else:
-            self.shape_predictor = None
 
         if svm_model_path is not None:
             self.load(svm_model_path)
-
-        self.logger = logging.getLogger(__name__)
+        else:
+            self.logger.warn(
+                "Need a trained model! If looking to train, look at the utils package.")
 
     def train(self):
         """
@@ -87,13 +85,13 @@ class FaceRecognizer():
         images = [cv2.cvtColor(img, cv2.COLOR_GRAY2RGB) for img in images]
 
         start_time = time.time()
-        self.logger.debug("Start timestamp: {}".format(start_time))
+        # self.logger.debug("Start timestamp: {}".format(start_time))
         embeddings = [self.model.compute_face_descriptor(
             image, landmarks[i]) for i, image in enumerate(images)]
 
         end_time = time.time()  # batch:100 s: ~1.5 sec; p: n/a
-        self.logger.debug("End time: {}. Runtime: {}".format(
-            end_time, (end_time-start_time)))
+        # self.logger.debug("End time: {}. Runtime: {}".format(
+        # end_time, (end_time-start_time)))
 
         return embeddings
 
