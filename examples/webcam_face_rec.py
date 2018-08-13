@@ -46,12 +46,10 @@ def run():
     camera_index = 0
     cam_height, cam_width = 360, 360
     # width, height = 150, 150
-    batch_size = 5
+    batch_size = 50
     face_recognition_confidence_threshold = 0.25
     frame_skip_factor = 3
 
-    # face_landmark_predictor_path = "/media/ankurrc/new_volume/softura/facerec/code/face-trigger/face_trigger/pre_trained/shape_predictor_5_face_landmarks.dat"
-    # face_recognizer_model_path = "/media/ankurrc/new_volume/softura/facerec/code/face-trigger/face_trigger/pre_trained/dlib_face_recognition_resnet_model_v1.dat"
     svm_model_path = "/media/ankurrc/new_volume/softura/facerec/code/face-trigger/face_trigger/pre_trained/svm_proba.pkl"
 
     source = cv2.VideoCapture(index=camera_index)
@@ -111,18 +109,19 @@ def run():
             sequence += 1
 
             # get bounding boxes
-            bb = clamp_rectangle(x1=face.left(), y1=face.top(
-            ), x2=face.right(), y2=face.bottom(), x2_max=grayImg.shape[0]-1, y2_max=grayImg.shape[1]-1)
+            # bb = clamp_rectangle(x1=face.left(), y1=face.top(
+            # ), x2=face.right(), y2=face.bottom(), x2_max=grayImg.shape[0]-1, y2_max=grayImg.shape[1]-1)
 
             # draw a rectangle around the detected face
-            cv2.rectangle(frame, (bb[0], bb[1]), (bb[2], bb[3]), (255, 0, 255))
+            cv2.rectangle(frame, (face.left(), face.top()),
+                          (face.right(), face.bottom()), (255, 0, 255))
 
             # get the landmarks
             landmark = landmark_detector.predict(face, grayImg)
 
             # accumulate face and landmarks till we get a batch of batch_size
             if landmark is not None:
-                faces.append(grayImg[bb[0]:bb[2], bb[1]:bb[3]])
+                faces.append(grayImg)
                 landmarks.append(landmark)
 
             # recognize the face in the batch
@@ -211,7 +210,7 @@ def fps_count():
 import logging
 if __name__ == "__main__":
 
-    logging.basicConfig(level=logging.INFO)
+    logging.basicConfig(level=logging.DEBUG)
 
     try:
         run()

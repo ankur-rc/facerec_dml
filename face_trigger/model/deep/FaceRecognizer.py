@@ -18,6 +18,8 @@ from sklearn.svm import LinearSVC
 from sklearn.metrics import accuracy_score
 from sklearn.externals import joblib
 
+from face_trigger.process.post_process import FaceDetector
+
 """
 Deep Learning based face recognition module.
 """
@@ -57,9 +59,10 @@ class FaceRecognizer():
         """
         raise NotImplementedError()
 
-    def embed(self, images, landmarks=None):
+    def embed(self, images=None, landmarks=None):
         """
-        Generates embeddings for the given images
+        Generates embeddings for the given images. THe images should be a result of the face detector phase, 
+        i.e these images should contain a face detected by the face detector.
 
         :param images: the images to get embeddings of
         :type images: list of numpy.nadarray: (num_images, image_height, image_width)
@@ -67,42 +70,30 @@ class FaceRecognizer():
         :type landmarks: list, shape: (num_images, 5, 2)
         :returns: the face embeddings
         :rtype: list
+
+        **Note:** The images contain the entire frame, and not just the cropped out face. Alignmnet is taken care of when we generate the embeddings.
+
         """
+
+        assert len(images) == len(landmarks)
 
         embeddings = []
 
-        if landmarks is None:
-            for i in tqdm.tnrange(0, len(images)):
-                img = images[i]
-                img = cv2.cvtColor(img, cv2.COLOR_GRAY2RGB)
+        # convert from gray to rgb
+        # images = np.array(images)
+        # images = images.reshape(images.shape + (1,))
+        # images = np.repeat(images, 3, axis=3)
 
-                rect = dlib.rectangle(top=0, left=0, bottom=(
-                    (img.shape)[1]-1), right=((img.shape)[0]-1))
+        images = [cv2.cvtColor(img, cv2.COLOR_GRAY2RGB) for img in images]
 
-                shape = self.shape_predictor(img, rect)
+        start_time = time.time()
+        self.logger.debug("Start timestamp: {}".format(start_time))
+        embeddings = [self.model.compute_face_descriptor(
+            image, landmarks[i]) for i, image in enumerate(images)]
 
-                embedding = self.model.compute_face_descriptor(img, shape)
-                embeddings.append(embedding)
-                i += 1
-
-        else:
-            # convert from gray to rgb
-            # images = np.array(images)
-            # images = images.reshape(images.shape + (1,))
-            # images = np.repeat(images, 3, axis=3)
-
-            images = [cv2.cvtColor(img, cv2.COLOR_GRAY2RGB) for img in images]
-
-            assert len(images) == len(landmarks)
-
-            start_time = time.time()
-            self.logger.debug("Start timestamp: {}".format(start_time))
-            embeddings = [self.model.compute_face_descriptor(
-                image, landmarks[i]) for i, image in enumerate(images)]
-
-            end_time = time.time()  # batch:100 s: ~1.5 sec; p:
-            self.logger.debug("End time: {}. Runtime: {}".format(
-                end_time, (end_time-start_time)))
+        end_time = time.time()  # batch:100 s: ~1.5 sec; p: n/a
+        self.logger.debug("End time: {}. Runtime: {}".format(
+            end_time, (end_time-start_time)))
 
         return embeddings
 
@@ -192,12 +183,18 @@ class FaceRecognizer():
         # get the probability of the highest predicted class
         prediction_probabilities = np.max(predictions, axis=1)
 
+        self.logger.debug(
+            "Predicted indices before thresholding: {}".format(prediction_indices))
+
         # get the boolean mask for all indices that have a probability less than the threshold value
         thresholded_probabilities = prediction_probabilities < threshold
         # extract the indices from the boolean mask
         thresholded_indices = np.nonzero(thresholded_probabilities)
         # set the indices below the threshold to belong to an unknown class
         prediction_indices[thresholded_indices] = unknown
+
+        self.logger.debug(
+            "Predicted indices after thresholding: {}".format(prediction_indices))
 
         # get the index that occured the most in the batch that was evaluated
         predicted_identity = np.max(prediction_indices)

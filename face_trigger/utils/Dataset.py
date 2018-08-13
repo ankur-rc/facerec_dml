@@ -79,21 +79,21 @@ class Dataset():
 
             for i in pbar.trange(1, folds+1):
 
-                pbar.tqdm.write("Generating: Fold {0:d}".format(i))
+                self.logger.info("Generating: Fold {0:d}".format(i))
 
                 fold_path = os.path.join(
                     self.split_path, str(training_sample), str(i))
 
-                pbar.tqdm.write("Creating directory: {0}".format(fold_path))
+                self.logger.info("Creating directory: {0}".format(fold_path))
                 os.makedirs(fold_path)
-                pbar.tqdm.write("done.")
+                self.logger.info("done.")
 
                 train_file = os.path.join(fold_path, train_file_suffix)
                 test_file = os.path.join(fold_path, test_file_suffix)
 
-                pbar.tqdm.write(train_file)
+                self.logger.info(train_file)
 
-                bar = pbar.tqdm(total=int(9e9))
+                # bar = pbar.tqdm(total=int(9e9))
                 subjects = 0
                 rejected_dirs = []
 
@@ -104,11 +104,11 @@ class Dataset():
 
                         # here root denotes the folder indicating the user id
                         if root != self.dataset_path:
-                            bar.set_description(
-                                "Dir-->" + os.path.basename(root))
+                            # bar.set_description(
+                            #     "Dir-->" + os.path.basename(root))
                             random.Random().shuffle(files)
 
-                            bar.update()
+                            # bar.update()
 
                             if len(files) - 1 < training_sample:
                                 rejected_dirs.append(os.path.basename(root))
@@ -131,10 +131,10 @@ class Dataset():
                             train.write(train_sample)
                             test.write(test_sample)
 
-                        elif root == self.dataset_path:
-                            bar.total = len(dirs)
+                        # elif root == self.dataset_path:
+                            # bar.total = len(dirs)
 
-                    bar.close()
+                            # bar.close()
 
                 i += 1
 
