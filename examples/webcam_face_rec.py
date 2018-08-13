@@ -50,8 +50,8 @@ def run():
     face_recognition_confidence_threshold = 0.25
     frame_skip_factor = 3
 
-    face_landmark_predictor_path = "/media/ankurrc/new_volume/softura/facerec/code/face-trigger/face_trigger/pre_trained/shape_predictor_5_face_landmarks.dat"
-    face_recognizer_model_path = "/media/ankurrc/new_volume/softura/facerec/code/face-trigger/face_trigger/pre_trained/dlib_face_recognition_resnet_model_v1.dat"
+    # face_landmark_predictor_path = "/media/ankurrc/new_volume/softura/facerec/code/face-trigger/face_trigger/pre_trained/shape_predictor_5_face_landmarks.dat"
+    # face_recognizer_model_path = "/media/ankurrc/new_volume/softura/facerec/code/face-trigger/face_trigger/pre_trained/dlib_face_recognition_resnet_model_v1.dat"
     svm_model_path = "/media/ankurrc/new_volume/softura/facerec/code/face-trigger/face_trigger/pre_trained/svm_proba.pkl"
 
     source = cv2.VideoCapture(index=camera_index)
@@ -68,10 +68,10 @@ def run():
     face_detector = FaceDetector(face_area_threshold=face_area_threshold)
     # reference to landmark detector
     landmark_detector = LandmarkDetector(
-        predictor_path=face_landmark_predictor_path)
+        predictor_path=None)
     # reference to face recognizer
     face_recognizer = FaceRecognizer(
-        model_path=face_recognizer_model_path, svm_model_path=svm_model_path)
+        model_path=None, svm_model_path=svm_model_path)
 
     # open the source if not opened already
     if not source.isOpened():

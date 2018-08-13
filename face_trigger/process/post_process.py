@@ -7,6 +7,7 @@ import logging
 import cv2
 import dlib
 import numpy
+import pkg_resources
 
 from face_trigger.utils.common import clamp_rectangle, shape_to_np
 
@@ -178,13 +179,18 @@ class LandmarkDetector:
         A landmark detector that annotates face bounding boxes with 5 landmarks
     """
 
-    def __init__(self, predictor_path="../pre_trained/shape_predictor_5_face_landmarks.dat"):
+    def __init__(self, predictor_path=None):
         """
         Instantiates the 'LandmarkDetector' object
 
         :param predictor_path: path to trained face predictor model
         :type predictor_path: str
         """
+
+        if predictor_path is None:
+            predictor_path = pkg_resources.resource_filename(
+                "face_trigger", "pre_trained/shape_predictor_5_face_landmarks.dat")
+
         self.predictor = dlib.shape_predictor(predictor_path)
         self.logger = logging.getLogger(__name__)
 

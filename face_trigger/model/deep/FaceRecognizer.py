@@ -11,6 +11,7 @@ import dlib
 import cv2
 import sklearn
 import time
+import pkg_resources
 
 from sklearn.preprocessing import LabelEncoder
 from sklearn.svm import LinearSVC
@@ -29,10 +30,14 @@ class FaceRecognizer():
     https://arxiv.org/abs/1503.03832
     """
 
-    def __init__(self, model_path="dlib_face_recognition_resnet_model_v1.dat", shape_predictor_path=None, svm_model_path=None):
+    def __init__(self, model_path=None, shape_predictor_path=None, svm_model_path=None):
         """
         Instantiate a FaceRecognizer object
         """
+
+        if model_path is None:
+            model_path = pkg_resources.resource_filename(
+                "face_trigger", "pre_trained/dlib_face_recognition_resnet_model_v1.dat")
 
         self.model = dlib.face_recognition_model_v1(model_path)
         if shape_predictor_path is not None:
