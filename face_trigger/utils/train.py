@@ -6,25 +6,16 @@ import logging
 
 import os
 import random
-import shutil
 
 import numpy as np
 import cv2
 import uuid
 import pprint
 import tqdm
-from multiprocessing import cpu_count
 
-from sklearn.preprocessing import LabelEncoder
-from sklearn.svm import LinearSVC
-from sklearn.metrics import accuracy_score
-from sklearn.model_selection import StratifiedShuffleSplit
-from sklearn.model_selection import GridSearchCV
-from sklearn.calibration import CalibratedClassifierCV
 
 from face_trigger.process.post_process import FaceDetector, LandmarkDetector, FaceAlign
 from face_trigger.model.deep.FaceRecognizer import FaceRecognizer
-from face_trigger.utils.data import Dataset
 
 
 def generate_embeddings_for_dataset(dataset_path=None):
@@ -158,59 +149,3 @@ def generate_embeddings_for_split_and_fold(dataset_path=None, split_path=None, f
     y['test'] = np.array(y['test'])
 
     return X['train'], y['train'], X['test'], y['test']
-
-
-def fit_embeddings(embeddings=None, labels=None, classifier=None, cv=None, param_grid=None, num_jobs=None):
-    """
-    Trains a linear SVC based on the embeddings and labels.
-
-    :param embeddings: list of 128-D lists, each representaing a face embedding
-    :type embeddings: list of list
-    :param labels: array of labels corresponding to each embeddings
-    :type labels: numpy.array
-    """
-
-    grid = GridSearchCV(classifier, param_grid=param_grid,
-                        cv=cv, verbose=True, n_jobs=num_jobs)
-
-    encoder = LabelEncoder()
-
-    X_train = np.array(embeddings)
-    encoder.fit(labels)
-
-    y_train = encoder.transform(labels)
-
-    encoder_mapping = dict(
-        zip(encoder.classes_, y_train))
-
-    #grid.fit(X_train, y_train)
-
-    # print("The best parameters are {0:s} with a score of {1:0.2f}".format(
-    #     grid.best_params_, grid.best_score_))
-
-    return encoder_mapping
-
-
-if __name__ == "__main__":
-    logging.basicConfig(level=logging.DEBUG)
-
-    # generate embeddings
-    X, y = generate_embeddings_for_dataset(
-        dataset_path="/media/ankurrc/new_volume/softura/facerec/att_filtered")
-
-    # training knobs
-    dual = True  # set false for att dataset
-    class_weight = "balanced"  # set None for att dataset
-    Cs = np.logspace(-3, 3, 7, base=10.0)
-    n_jobs = cpu_count()
-
-    param_grid = dict(base_estimator__C=Cs)
-    cv = StratifiedShuffleSplit(n_splits=3, test_size=0.2, random_state=42)
-
-    svm = LinearSVC(dual=dual, class_weight=class_weight)
-    clf = CalibratedClassifierCV(svm)
-
-    label_mapping = fit_embeddings(
-        embeddings=X, labels=y, classifier=clf, cv=cv, param_grid=param_grid, num_jobs=n_jobs)
-
-    pprint.pprint(label_mapping)

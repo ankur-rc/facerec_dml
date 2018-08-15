@@ -45,12 +45,12 @@ def run():
     face_area_threshold = 0.15
     camera_index = 0
     cam_height, cam_width = 360, 360
-    # width, height = 150, 150
-    batch_size = 50
+    batch_size = 10
     face_recognition_confidence_threshold = 0.25
     frame_skip_factor = 3
 
-    svm_model_path = "/media/ankurrc/new_volume/softura/facerec/code/face-trigger/face_trigger/pre_trained/svm_proba.pkl"
+    svm_model_path = "/media/ankurrc/new_volume/softura/facerec/trained/classifier.pkl"
+    label_mapping_path = "/media/ankurrc/new_volume/softura/facerec/trained/label_mapping.pkl"
 
     source = cv2.VideoCapture(index=camera_index)
     source.set(cv2.CAP_PROP_FRAME_WIDTH, cam_width)
@@ -69,7 +69,7 @@ def run():
         predictor_path=None)
     # reference to face recognizer
     face_recognizer = FaceRecognizer(
-        model_path=None, svm_model_path=svm_model_path)
+        dnn_model_path=None, classifier_model_path=svm_model_path, label_map_path=label_mapping_path)
 
     # open the source if not opened already
     if not source.isOpened():

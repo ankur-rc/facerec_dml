@@ -20,15 +20,15 @@ from face_trigger.process.post_process import FaceDetector, LandmarkDetector, Fa
 class Dataset():
 
     """
-    A class for performing various operations on a dataset
+    A class for generating manual train-test splits and loading data from generated splits.
 
     Example:
     --------------------------------------------------------
-    >>> dataset = Dataset(dataset_path="/media/ankurrc/new_volume/softura/facerec/datasets/norm_standard_att",
-                      split_path="/media/ankurrc/new_volume/softura/facerec/split_path")
+    >>> dataset = Dataset(dataset_path="/media/ankurrc/new_volume/softura/facerec/datasets/norm_standard_att")
     >>> folds = 3
     >>> training_samples = [2, 5, 8]
-    >>> dataset.split(num_train_list=training_samples, folds=folds)
+    >>> dataset.split(num_train_list=training_samples, folds=folds, 
+                    split_path="/media/ankurrc/new_volume/softura/facerec/split_path")
 
     """
 
@@ -38,8 +38,6 @@ class Dataset():
 
         :param dataset_path: path to the dataset
         :type dataset_path: str
-        :param split_path: path to store the dataset train-test split information. Will rename the old directory, if it exists.
-        :type split_path: str
         """
 
         self.logger = logging.getLogger(__name__)
@@ -47,25 +45,9 @@ class Dataset():
         if not os.path.exists(os.path.realpath(dataset_path)):
             raise Exception("Invalid dataset path!")
 
-        if split_path is not None:
-            self.split_path = os.path.realpath(split_path)
-
-            if os.path.isfile(self.split_path):
-                raise Exception(
-                    "A file with the same name as 'split_path' already exists. Please make sure split_path location is a valid one!")
-
-            if os.path.isdir(self.split_path):
-                os.rename(self.split_path, os.path.join(os.path.split(
-                    self.split_path)[0], os.path.split(
-                    self.split_path)[1] + "_" + str(uuid.uuid4().get_hex())))
-            os.makedirs(self.split_path)
-
-        else:
-            self.split_path = None
-
         self.dataset_path = os.path.realpath(dataset_path)
 
-    def split(self, num_train_list=None, folds=1):
+    def split(self, split_path=None, num_train_list=None, folds=1):
         """
         Generates a train-test split based on the number of training samples
 
@@ -73,9 +55,24 @@ class Dataset():
         :type num_train_list: list of inttegers
         :param fold: total number of folds
         :type fold: int
+        :param split_path: path to store the dataset train-test split information. Will rename the old directory, if it exists.
+        :type split_path: str
         """
 
-        assert self.split_path is not None
+        assert split_path is not None
+
+        split_path = os.path.realpath(split_path)
+
+        if os.path.isfile(split_path):
+            raise Exception(
+                "A file with the same name as 'split_path' already exists. Please make sure split_path location is a valid one!")
+
+        if os.path.isdir(split_path):
+            os.rename(split_path, os.path.join(os.path.split(
+                split_path)[0], os.path.split(
+                split_path)[1] + "_" + str(uuid.uuid4().get_hex())))
+
+        os.makedirs(split_path)
 
         if not isinstance(num_train_list, list):
             raise Exception("num_train_list should be a list!")
@@ -92,7 +89,7 @@ class Dataset():
                 self.logger.info("Generating: Fold {0:d}".format(i))
 
                 fold_path = os.path.join(
-                    self.split_path, str(training_sample), str(i))
+                    split_path, str(training_sample), str(i))
 
                 self.logger.info("Creating directory: {0}".format(fold_path))
                 os.makedirs(fold_path)
@@ -154,7 +151,7 @@ class Dataset():
             self.logger.info(
                 "We have {0:d} subjects in our dataset.".format(subjects))
 
-    def load_data(self, is_train=None, num_train=None, fold=None):
+    def load_data(self, split_path=None, is_train=None, num_train=None, fold=None):
         """
         Gets the test or train data
 
@@ -164,11 +161,13 @@ class Dataset():
         :type fold: int
         :param num_train: the subdirectory indicating number of training samples per subject
         :type num_train: int
+        :param split_path: path to store the dataset train-test split information. Will rename the old directory, if it exists.
+        :type split_path: str
         :returns: a tuple of a vector of faces and it's corresponding labels
         :rtype: (numpy.ndarray, numpy.ndarray)
         """
 
-        if not os.path.exists(self.split_path):
+        if not os.path.exists(split_path):
             raise Exception(
                 "Dataset test-train split has not been generated, yet! Please run split() before loading data.")
 
@@ -188,7 +187,7 @@ class Dataset():
             suffix = "test.csv"
 
         csv_file = os.path.join(
-            self.split_path, str(num_train), str(fold), suffix)
+            split_path, str(num_train), str(fold), suffix)
         X = []
         y = []
 
@@ -210,8 +209,6 @@ class Dataset():
                     y.append(int(label))
 
         y = np.array(y)
-        # X = np.array(X)
-        # print y.shape, X.shape
 
         return X, y
 
@@ -327,12 +324,3 @@ def dataset_filter(dataset_path=None, output_path=None):
     pprint.pprint(rejected_faces)
 
     return rejected_faces
-
-
-if __name__ == "__main__":
-    logging.basicConfig(level=logging.DEBUG)
-
-    dataset = Dataset(
-        dataset_path="/media/ankurrc/new_volume/softura/facerec/att_filtered")
-
-    X, y = dataset.load_all()

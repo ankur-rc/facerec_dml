@@ -14,7 +14,6 @@ import time
 import pkg_resources
 
 from sklearn.preprocessing import LabelEncoder
-from sklearn.svm import LinearSVC
 from sklearn.metrics import accuracy_score
 from sklearn.externals import joblib
 
@@ -32,23 +31,36 @@ class FaceRecognizer():
     https://arxiv.org/abs/1503.03832
     """
 
-    def __init__(self, model_path=None, svm_model_path=None):
+    def __init__(self, dnn_model_path=None, classifier_model_path=None, label_map_path=None):
         """
         Instantiate a FaceRecognizer object
+
+        :param dnn_model_path: path to the trainined dnn featyure extractor
+        :type dnn_model_path: str
+        :param classifier_model_path: path to the trained sklearn classifier
+        :type classifier_model_path: str
+        :param label_map_path: path to the pickled label map
+        :type label_map_path: str
         """
         self.logger = logging.getLogger(__name__)
 
-        if model_path is None:
-            model_path = pkg_resources.resource_filename(
+        if dnn_model_path is None:
+            self.logger.debug("No DNN model path specified, using default.")
+            dnn_model_path = pkg_resources.resource_filename(
                 "face_trigger", "pre_trained/dlib_face_recognition_resnet_model_v1.dat")
 
-        self.model = dlib.face_recognition_model_v1(model_path)
+        self.dnn_model = dlib.face_recognition_model_v1(dnn_model_path)
 
-        if svm_model_path is not None:
-            self.load(svm_model_path)
+        if classifier_model_path is not None:
+            self.classifier = self.load(classifier_model_path)
         else:
-            self.logger.warn(
-                "Need a trained model! If looking to train, look at the utils package.")
+            raise Exception("No classifier model path given!")
+
+        if label_map_path is not None:
+            self.label_map = self.load_label_mapping(
+                label_map_path=label_map_path)
+        else:
+            raise Exception("No label mapping provided!")
 
     def train(self):
         """
@@ -86,7 +98,7 @@ class FaceRecognizer():
 
         start_time = time.time()
         # self.logger.debug("Start timestamp: {}".format(start_time))
-        embeddings = [self.model.compute_face_descriptor(
+        embeddings = [self.dnn_model.compute_face_descriptor(
             image, landmarks[i]) for i, image in enumerate(images)]
 
         end_time = time.time()  # batch:100 s: ~1.5 sec; p: n/a
@@ -95,67 +107,32 @@ class FaceRecognizer():
 
         return embeddings
 
-    def fit_embeddings(self, embeddings, labels):
-        """
-        Trains a linear SVC based on the embeddings and labels.
-
-        :param embeddings: list of 128-D lists, each representaing a face embedding
-        :type embeddings: list of list
-        :param labels: array of labels corresponding to each embeddings
-        :type labels: numpy.array
-        """
-
-        self.svc = LinearSVC()
-
-        encoder = LabelEncoder()
-
-        X_train = np.array(embeddings)
-        y_train = encoder.fit_transform(labels)
-
-        self.svc.fit(X_train, y_train)
-
-    def evaluate(self, X_test, ground_truths):
-        """
-        Evaluate the trained SVC on the training set.
-
-        :param X_test: the test embeddings
-        :type X_test: numpy.ndarray, shape=(N,128)
-        :param ground_truths: the ground truth data corresponding to the test set
-        :type ground_truths: numpy.ndarray, shape=(N,1)
-        """
-
-        encoder = LabelEncoder()
-
-        X_test = np.array(X_test)
-        y_test = encoder.fit_transform(ground_truths)
-
-        acc_svc = accuracy_score(y_test, self.svc.predict(X_test))
-
-        precision_perc = acc_svc*100
-
-        return precision_perc
-
-    def save(self, model_path):
+    def save(self, classifier_model_path):
         """
         Save the trained classifier.
         Call only after fitting the embeddings, otherwise will throw an exception.
 
-        :param model_path: path along with name specifiying where to save the model. Extension should be .pkl for brevity.
-        :type model_path: string
+        :param classifier_model_path: path along with name specifiying where to save the model. Extension should be .pkl for brevity.
+        :type classifier_model_path: string
         """
-        joblib.dump(self.svc, model_path)
+        joblib.dump(self.classifier, classifier_model_path)
 
-    def load(self, model_path):
+    def load(self, classifier_model_path):
         """
         Load the saved classifier model.
 
-        :param model_path: path to the trained classifier model
-        :type model_path: string
+        :param classifier_model_path: path to the trained classifier model
+        :type classifier_model_path: string
         """
 
-        self.svc = joblib.load(model_path)
+        if not os.path.exists(classifier_model_path):
+            raise Exception("Path to trained classifier model does not exist!")
 
-    def infer(self, embeddings, threshold=0.20, unknown_index=-1, in_parallel=False):
+        classifier_model_path = os.path.realpath(classifier_model_path)
+
+        return joblib.load(classifier_model_path)
+
+    def infer(self, embeddings, threshold=0.20, unknown_index=-1):
         """
         Infer and return a predicted face identity.
 
@@ -165,8 +142,6 @@ class FaceRecognizer():
         :type threshold: float
         :param unknown_index: a integer id that denotes an unknown class
         :type unknown_index: int
-        :param in_parallel: flag to indicate whethetr to run inference in parallel among cpu cores
-        :typr in_parallel: bool
         :returns: an identity
         :rtype: int
         """
@@ -174,7 +149,7 @@ class FaceRecognizer():
         unknown = unknown_index
 
         # get prediction probabilities across all classes for each sample
-        predictions = self.svc.predict_proba(np.array(embeddings))
+        predictions = self.classifier.predict_proba(np.array(embeddings))
 
         # get the index of the highest predicted class
         prediction_indices = np.argmax(predictions, axis=1)
@@ -197,4 +172,24 @@ class FaceRecognizer():
         # get the index that occured the most in the batch that was evaluated
         predicted_identity = np.max(prediction_indices)
 
+        if predicted_identity != unknown:
+            predicted_identity = self.label_map[predicted_identity]
+
         return predicted_identity
+
+    def load_label_mapping(self, label_map_path=None):
+        """
+        Loads the mapping between the real labels and the ones used by sklearn during training.
+
+        :param label_map_path: path to the pickled label map
+        :type label_map_path: str
+        :returns: a dictionary mapping from encoded label to real label
+        :rtype: dict
+        """
+
+        if not os.path.exists(label_map_path):
+            raise Exception("Path to label map does not exist!")
+
+        label_map_path = os.path.realpath(label_map_path)
+
+        return joblib.load(label_map_path)
