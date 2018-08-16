@@ -6,8 +6,8 @@
   <head>
     <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>face_trigger.process package &#8212; face_trigger  documentation</title>
-    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <title>face_trigger.process package &#8212; Face Trigger  documentation</title>
+    <link rel="stylesheet" href="_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
     <script type="text/javascript" src="_static/jquery.js"></script>
@@ -16,21 +16,31 @@
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="face_trigger.utils package" href="face_trigger.utils.html" />
-    <link rel="prev" title="face_trigger.model.deep package" href="face_trigger.model.deep.html" />
-   
-  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
-  
-  
-  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
-
+    <link rel="prev" title="face_trigger.model.deep package" href="face_trigger.model.deep.html" /> 
   </head><body>
-  
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="face_trigger.utils.html" title="face_trigger.utils package"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="face_trigger.model.deep.html" title="face_trigger.model.deep package"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">Face Trigger  documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="face_trigger.html" accesskey="U">face_trigger package</a> &#187;</li> 
+      </ul>
+    </div>  
 
     <div class="document">
       <div class="documentwrapper">
         <div class="bodywrapper">
-          
-
           <div class="body" role="main">
             
   <div class="section" id="face-trigger-process-package">
@@ -43,13 +53,13 @@
 <p>Module for performing Face detection, Face Alignment and Landmark Detection</p>
 <dl class="class">
 <dt id="face_trigger.process.post_process.FaceAlign">
-<em class="property">class </em><code class="descclassname">face_trigger.process.post_process.</code><code class="descname">FaceAlign</code><span class="sig-paren">(</span><em>left_eye_offset=(0.35</em>, <em>0.35)</em>, <em>final_width=256</em>, <em>final_height=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/face_trigger/process/post_process.html#FaceAlign"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#face_trigger.process.post_process.FaceAlign" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">face_trigger.process.post_process.</code><code class="descname">FaceAlign</code><span class="sig-paren">(</span><em>left_eye_offset=(0.35</em>, <em>0.35)</em>, <em>final_width=256</em>, <em>final_height=None</em><span class="sig-paren">)</span><a class="headerlink" href="#face_trigger.process.post_process.FaceAlign" title="Permalink to this definition">¶</a></dt>
 <dd><p>Align a face by performing affine transformations.
 Inspired from ‘Face Alignment with OpenCV and Python’
 <a class="reference external" href="https://www.pyimagesearch.com/2017/05/22/face-alignment-with-opencv-and-python/">https://www.pyimagesearch.com/2017/05/22/face-alignment-with-opencv-and-python/</a></p>
 <dl class="method">
 <dt id="face_trigger.process.post_process.FaceAlign.align">
-<code class="descname">align</code><span class="sig-paren">(</span><em>img</em>, <em>landmarks</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/face_trigger/process/post_process.html#FaceAlign.align"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#face_trigger.process.post_process.FaceAlign.align" title="Permalink to this definition">¶</a></dt>
+<code class="descname">align</code><span class="sig-paren">(</span><em>img</em>, <em>landmarks</em><span class="sig-paren">)</span><a class="headerlink" href="#face_trigger.process.post_process.FaceAlign.align" title="Permalink to this definition">¶</a></dt>
 <dd><p>Align the given image according to given face landmarks -
 1. Eyes are aligned on a horizontal axis
 2. Face is scaled to keep eye centers on the same offset location w.r.t the face
@@ -74,11 +84,11 @@ Inspired from ‘Face Alignment with OpenCV and Python’
 
 <dl class="class">
 <dt id="face_trigger.process.post_process.FaceDetector">
-<em class="property">class </em><code class="descclassname">face_trigger.process.post_process.</code><code class="descname">FaceDetector</code><span class="sig-paren">(</span><em>face_area_threshold=0.25</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/face_trigger/process/post_process.html#FaceDetector"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#face_trigger.process.post_process.FaceDetector" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">face_trigger.process.post_process.</code><code class="descname">FaceDetector</code><span class="sig-paren">(</span><em>face_area_threshold=0.25</em><span class="sig-paren">)</span><a class="headerlink" href="#face_trigger.process.post_process.FaceDetector" title="Permalink to this definition">¶</a></dt>
 <dd><p>HOG-based frontal face detector class.</p>
 <dl class="method">
 <dt id="face_trigger.process.post_process.FaceDetector.detect">
-<code class="descname">detect</code><span class="sig-paren">(</span><em>gray_frame</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/face_trigger/process/post_process.html#FaceDetector.detect"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#face_trigger.process.post_process.FaceDetector.detect" title="Permalink to this definition">¶</a></dt>
+<code class="descname">detect</code><span class="sig-paren">(</span><em>gray_frame</em><span class="sig-paren">)</span><a class="headerlink" href="#face_trigger.process.post_process.FaceDetector.detect" title="Permalink to this definition">¶</a></dt>
 <dd><p>Detect faces in the frame.
 If multiple faces are detected, only the largest face is taken into consideration.</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -97,7 +107,7 @@ If multiple faces are detected, only the largest face is taken into consideratio
 
 <dl class="method">
 <dt id="face_trigger.process.post_process.FaceDetector.detect_unbounded">
-<code class="descname">detect_unbounded</code><span class="sig-paren">(</span><em>gray_frame</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/face_trigger/process/post_process.html#FaceDetector.detect_unbounded"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#face_trigger.process.post_process.FaceDetector.detect_unbounded" title="Permalink to this definition">¶</a></dt>
+<code class="descname">detect_unbounded</code><span class="sig-paren">(</span><em>gray_frame</em><span class="sig-paren">)</span><a class="headerlink" href="#face_trigger.process.post_process.FaceDetector.detect_unbounded" title="Permalink to this definition">¶</a></dt>
 <dd><p>Detect all faces in the frame</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -117,11 +127,11 @@ If multiple faces are detected, only the largest face is taken into consideratio
 
 <dl class="class">
 <dt id="face_trigger.process.post_process.LandmarkDetector">
-<em class="property">class </em><code class="descclassname">face_trigger.process.post_process.</code><code class="descname">LandmarkDetector</code><span class="sig-paren">(</span><em>predictor_path=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/face_trigger/process/post_process.html#LandmarkDetector"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#face_trigger.process.post_process.LandmarkDetector" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">face_trigger.process.post_process.</code><code class="descname">LandmarkDetector</code><span class="sig-paren">(</span><em>predictor_path=None</em><span class="sig-paren">)</span><a class="headerlink" href="#face_trigger.process.post_process.LandmarkDetector" title="Permalink to this definition">¶</a></dt>
 <dd><p>A landmark detector that annotates face bounding boxes with 5 landmarks</p>
 <dl class="method">
 <dt id="face_trigger.process.post_process.LandmarkDetector.predict">
-<code class="descname">predict</code><span class="sig-paren">(</span><em>bounding_box</em>, <em>grayImg</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/face_trigger/process/post_process.html#LandmarkDetector.predict"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#face_trigger.process.post_process.LandmarkDetector.predict" title="Permalink to this definition">¶</a></dt>
+<code class="descname">predict</code><span class="sig-paren">(</span><em>bounding_box</em>, <em>grayImg</em><span class="sig-paren">)</span><a class="headerlink" href="#face_trigger.process.post_process.LandmarkDetector.predict" title="Permalink to this definition">¶</a></dt>
 <dd><p>Provides an array of tuples for facial landmarks, predicted within a bounding box</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -153,51 +163,33 @@ If multiple faces are detected, only the largest face is taken into consideratio
 
 
           </div>
-          
         </div>
       </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
-<h1 class="logo"><a href="index.html">face_trigger</a></h1>
-
-
-
-
-
-
-
-
-<h3>Navigation</h3>
-<p class="caption"><span class="caption-text">Contents:</span></p>
-<ul class="current">
-<li class="toctree-l1 current"><a class="reference internal" href="face_trigger.html">face_trigger package</a><ul class="current">
-<li class="toctree-l2 current"><a class="reference internal" href="face_trigger.html#subpackages">Subpackages</a><ul class="current">
-<li class="toctree-l3"><a class="reference internal" href="face_trigger.model.html">face_trigger.model package</a></li>
-<li class="toctree-l3 current"><a class="current reference internal" href="#">face_trigger.process package</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="#submodules">Submodules</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#module-face_trigger.process.post_process">face_trigger.process.post_process module</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#module-face_trigger.process">Module contents</a></li>
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="face_trigger.utils.html">face_trigger.utils package</a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="face_trigger.html#module-face_trigger">Module contents</a></li>
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">face_trigger.process package</a><ul>
+<li><a class="reference internal" href="#submodules">Submodules</a></li>
+<li><a class="reference internal" href="#module-face_trigger.process.post_process">face_trigger.process.post_process module</a></li>
+<li><a class="reference internal" href="#module-face_trigger.process">Module contents</a></li>
 </ul>
 </li>
 </ul>
 
-<div class="relations">
-<h3>Related Topics</h3>
-<ul>
-  <li><a href="index.html">Documentation overview</a><ul>
-  <li><a href="face_trigger.html">face_trigger package</a><ul>
-      <li>Previous: <a href="face_trigger.model.deep.html" title="previous chapter">face_trigger.model.deep package</a></li>
-      <li>Next: <a href="face_trigger.utils.html" title="next chapter">face_trigger.utils package</a></li>
-  </ul></li>
-  </ul></li>
-</ul>
-</div>
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="face_trigger.model.deep.html"
+                        title="previous chapter">face_trigger.model.deep package</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="face_trigger.utils.html"
+                        title="next chapter">face_trigger.utils package</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/face_trigger.process.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
 <div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
     <div class="searchformwrapper">
@@ -214,20 +206,28 @@ If multiple faces are detected, only the largest face is taken into consideratio
       </div>
       <div class="clearer"></div>
     </div>
-    <div class="footer">
-      &copy;2018, Author.
-      
-      |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.7.6</a>
-      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.11</a>
-      
-      |
-      <a href="_sources/face_trigger.process.rst.txt"
-          rel="nofollow">Page source</a>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="face_trigger.utils.html" title="face_trigger.utils package"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="face_trigger.model.deep.html" title="face_trigger.model.deep package"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">Face Trigger  documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="face_trigger.html" >face_trigger package</a> &#187;</li> 
+      </ul>
     </div>
-
-    
-
-    
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2018, Softura.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.6.
+    </div>
   </body>
 </html>

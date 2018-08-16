@@ -6,8 +6,8 @@
   <head>
     <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>face_trigger.utils package &#8212; face_trigger  documentation</title>
-    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <title>face_trigger.utils package &#8212; Face Trigger  documentation</title>
+    <link rel="stylesheet" href="_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
     <script type="text/javascript" src="_static/jquery.js"></script>
@@ -15,21 +15,28 @@
     <script type="text/javascript" src="_static/doctools.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="prev" title="face_trigger.process package" href="face_trigger.process.html" />
-   
-  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
-  
-  
-  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
-
+    <link rel="prev" title="face_trigger.process package" href="face_trigger.process.html" /> 
   </head><body>
-  
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="face_trigger.process.html" title="face_trigger.process package"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">Face Trigger  documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="face_trigger.html" accesskey="U">face_trigger package</a> &#187;</li> 
+      </ul>
+    </div>  
 
     <div class="document">
       <div class="documentwrapper">
         <div class="bodywrapper">
-          
-
           <div class="body" role="main">
             
   <div class="section" id="face-trigger-utils-package">
@@ -42,18 +49,18 @@
 <p>Module that contains various common utilities.</p>
 <dl class="class">
 <dt id="face_trigger.utils.common.RepeatedTimer">
-<em class="property">class </em><code class="descclassname">face_trigger.utils.common.</code><code class="descname">RepeatedTimer</code><span class="sig-paren">(</span><em>interval</em>, <em>function</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/face_trigger/utils/common.html#RepeatedTimer"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#face_trigger.utils.common.RepeatedTimer" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">face_trigger.utils.common.</code><code class="descname">RepeatedTimer</code><span class="sig-paren">(</span><em>interval</em>, <em>function</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#face_trigger.utils.common.RepeatedTimer" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>Creates a timer object that can call a specified function repeatedly after a specified delayed. Does not drift over time.</p>
 <dl class="method">
 <dt id="face_trigger.utils.common.RepeatedTimer.start">
-<code class="descname">start</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/face_trigger/utils/common.html#RepeatedTimer.start"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#face_trigger.utils.common.RepeatedTimer.start" title="Permalink to this definition">¶</a></dt>
+<code class="descname">start</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#face_trigger.utils.common.RepeatedTimer.start" title="Permalink to this definition">¶</a></dt>
 <dd><p>Starts the timer thread and schedules the next call</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="face_trigger.utils.common.RepeatedTimer.stop">
-<code class="descname">stop</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/face_trigger/utils/common.html#RepeatedTimer.stop"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#face_trigger.utils.common.RepeatedTimer.stop" title="Permalink to this definition">¶</a></dt>
+<code class="descname">stop</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#face_trigger.utils.common.RepeatedTimer.stop" title="Permalink to this definition">¶</a></dt>
 <dd><p>Stops the timer thread</p>
 </dd></dl>
 
@@ -61,7 +68,7 @@
 
 <dl class="function">
 <dt id="face_trigger.utils.common.clamp_rectangle">
-<code class="descclassname">face_trigger.utils.common.</code><code class="descname">clamp_rectangle</code><span class="sig-paren">(</span><em>x1=None</em>, <em>y1=None</em>, <em>x2=None</em>, <em>y2=None</em>, <em>x1_min=0</em>, <em>y1_min=0</em>, <em>x2_max=None</em>, <em>y2_max=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/face_trigger/utils/common.html#clamp_rectangle"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#face_trigger.utils.common.clamp_rectangle" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">face_trigger.utils.common.</code><code class="descname">clamp_rectangle</code><span class="sig-paren">(</span><em>x1=None</em>, <em>y1=None</em>, <em>x2=None</em>, <em>y2=None</em>, <em>x1_min=0</em>, <em>y1_min=0</em>, <em>x2_max=None</em>, <em>y2_max=None</em><span class="sig-paren">)</span><a class="headerlink" href="#face_trigger.utils.common.clamp_rectangle" title="Permalink to this definition">¶</a></dt>
 <dd><p>Clamps the coordinates of a rectangle to within specified limits</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -91,7 +98,7 @@
 
 <dl class="function">
 <dt id="face_trigger.utils.common.shape_to_np">
-<code class="descclassname">face_trigger.utils.common.</code><code class="descname">shape_to_np</code><span class="sig-paren">(</span><em>shape</em>, <em>dtype='int'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/face_trigger/utils/common.html#shape_to_np"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#face_trigger.utils.common.shape_to_np" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">face_trigger.utils.common.</code><code class="descname">shape_to_np</code><span class="sig-paren">(</span><em>shape</em>, <em>dtype='int'</em><span class="sig-paren">)</span><a class="headerlink" href="#face_trigger.utils.common.shape_to_np" title="Permalink to this definition">¶</a></dt>
 <dd><p>Convert a dlib.shape to a numpy array</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -113,7 +120,7 @@
 <p>Module that contains functions related to dataset cleaning.</p>
 <dl class="class">
 <dt id="face_trigger.utils.data.Dataset">
-<em class="property">class </em><code class="descclassname">face_trigger.utils.data.</code><code class="descname">Dataset</code><span class="sig-paren">(</span><em>dataset_path=None</em>, <em>split_path=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/face_trigger/utils/data.html#Dataset"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#face_trigger.utils.data.Dataset" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">face_trigger.utils.data.</code><code class="descname">Dataset</code><span class="sig-paren">(</span><em>dataset_path=None</em>, <em>split_path=None</em><span class="sig-paren">)</span><a class="headerlink" href="#face_trigger.utils.data.Dataset" title="Permalink to this definition">¶</a></dt>
 <dd><p>A class for generating manual train-test splits and loading data from generated splits.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">dataset</span> <span class="o">=</span> <span class="n">Dataset</span><span class="p">(</span><span class="n">dataset_path</span><span class="o">=</span><span class="s2">&quot;/media/ankurrc/new_volume/softura/facerec/datasets/norm_standard_att&quot;</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">folds</span> <span class="o">=</span> <span class="mi">3</span>
@@ -124,7 +131,7 @@
 </div>
 <dl class="method">
 <dt id="face_trigger.utils.data.Dataset.load_data">
-<code class="descname">load_data</code><span class="sig-paren">(</span><em>split_path=None</em>, <em>is_train=None</em>, <em>num_train=None</em>, <em>fold=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/face_trigger/utils/data.html#Dataset.load_data"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#face_trigger.utils.data.Dataset.load_data" title="Permalink to this definition">¶</a></dt>
+<code class="descname">load_data</code><span class="sig-paren">(</span><em>split_path=None</em>, <em>is_train=None</em>, <em>num_train=None</em>, <em>fold=None</em><span class="sig-paren">)</span><a class="headerlink" href="#face_trigger.utils.data.Dataset.load_data" title="Permalink to this definition">¶</a></dt>
 <dd><p>Gets the test or train data</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -150,7 +157,7 @@
 
 <dl class="method">
 <dt id="face_trigger.utils.data.Dataset.split">
-<code class="descname">split</code><span class="sig-paren">(</span><em>split_path=None</em>, <em>num_train_list=None</em>, <em>folds=1</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/face_trigger/utils/data.html#Dataset.split"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#face_trigger.utils.data.Dataset.split" title="Permalink to this definition">¶</a></dt>
+<code class="descname">split</code><span class="sig-paren">(</span><em>split_path=None</em>, <em>num_train_list=None</em>, <em>folds=1</em><span class="sig-paren">)</span><a class="headerlink" href="#face_trigger.utils.data.Dataset.split" title="Permalink to this definition">¶</a></dt>
 <dd><p>Generates a train-test split based on the number of training samples</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -171,7 +178,7 @@
 
 <dl class="function">
 <dt id="face_trigger.utils.data.dataset_filter">
-<code class="descclassname">face_trigger.utils.data.</code><code class="descname">dataset_filter</code><span class="sig-paren">(</span><em>dataset_path=None</em>, <em>output_path=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/face_trigger/utils/data.html#dataset_filter"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#face_trigger.utils.data.dataset_filter" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">face_trigger.utils.data.</code><code class="descname">dataset_filter</code><span class="sig-paren">(</span><em>dataset_path=None</em>, <em>output_path=None</em><span class="sig-paren">)</span><a class="headerlink" href="#face_trigger.utils.data.dataset_filter" title="Permalink to this definition">¶</a></dt>
 <dd><p>Filter the dataset by:
 1. A face is detected in the image. If no face or more than one face is detected, the image is rejected.
 2. For each detected face, 5-landmarks are detected. If landmarks are not detected, image is rejected.
@@ -210,7 +217,7 @@
 <p>Module that contains functions for loading embeddings from dataset during training.</p>
 <dl class="function">
 <dt id="face_trigger.utils.train.generate_embeddings_for_dataset">
-<code class="descclassname">face_trigger.utils.train.</code><code class="descname">generate_embeddings_for_dataset</code><span class="sig-paren">(</span><em>dataset_path=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/face_trigger/utils/train.html#generate_embeddings_for_dataset"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#face_trigger.utils.train.generate_embeddings_for_dataset" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">face_trigger.utils.train.</code><code class="descname">generate_embeddings_for_dataset</code><span class="sig-paren">(</span><em>dataset_path=None</em><span class="sig-paren">)</span><a class="headerlink" href="#face_trigger.utils.train.generate_embeddings_for_dataset" title="Permalink to this definition">¶</a></dt>
 <dd><p>Generates embeddings by sequentially reading images from the dataset.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -226,7 +233,7 @@
 
 <dl class="function">
 <dt id="face_trigger.utils.train.generate_embeddings_for_split_and_fold">
-<code class="descclassname">face_trigger.utils.train.</code><code class="descname">generate_embeddings_for_split_and_fold</code><span class="sig-paren">(</span><em>dataset_path=None</em>, <em>split_path=None</em>, <em>fold=None</em>, <em>num_train=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/face_trigger/utils/train.html#generate_embeddings_for_split_and_fold"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#face_trigger.utils.train.generate_embeddings_for_split_and_fold" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">face_trigger.utils.train.</code><code class="descname">generate_embeddings_for_split_and_fold</code><span class="sig-paren">(</span><em>dataset_path=None</em>, <em>split_path=None</em>, <em>fold=None</em>, <em>num_train=None</em><span class="sig-paren">)</span><a class="headerlink" href="#face_trigger.utils.train.generate_embeddings_for_split_and_fold" title="Permalink to this definition">¶</a></dt>
 <dd><p>Generate embeddings of dataset for a particular split and fold.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -255,52 +262,32 @@
 
 
           </div>
-          
         </div>
       </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
-<h1 class="logo"><a href="index.html">face_trigger</a></h1>
-
-
-
-
-
-
-
-
-<h3>Navigation</h3>
-<p class="caption"><span class="caption-text">Contents:</span></p>
-<ul class="current">
-<li class="toctree-l1 current"><a class="reference internal" href="face_trigger.html">face_trigger package</a><ul class="current">
-<li class="toctree-l2 current"><a class="reference internal" href="face_trigger.html#subpackages">Subpackages</a><ul class="current">
-<li class="toctree-l3"><a class="reference internal" href="face_trigger.model.html">face_trigger.model package</a></li>
-<li class="toctree-l3"><a class="reference internal" href="face_trigger.process.html">face_trigger.process package</a></li>
-<li class="toctree-l3 current"><a class="current reference internal" href="#">face_trigger.utils package</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="#submodules">Submodules</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#module-face_trigger.utils.common">face_trigger.utils.common module</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#module-face_trigger.utils.data">face_trigger.utils.data module</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#module-face_trigger.utils.train">face_trigger.utils.train module</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#module-face_trigger.utils">Module contents</a></li>
-</ul>
-</li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="face_trigger.html#module-face_trigger">Module contents</a></li>
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">face_trigger.utils package</a><ul>
+<li><a class="reference internal" href="#submodules">Submodules</a></li>
+<li><a class="reference internal" href="#module-face_trigger.utils.common">face_trigger.utils.common module</a></li>
+<li><a class="reference internal" href="#module-face_trigger.utils.data">face_trigger.utils.data module</a></li>
+<li><a class="reference internal" href="#module-face_trigger.utils.train">face_trigger.utils.train module</a></li>
+<li><a class="reference internal" href="#module-face_trigger.utils">Module contents</a></li>
 </ul>
 </li>
 </ul>
 
-<div class="relations">
-<h3>Related Topics</h3>
-<ul>
-  <li><a href="index.html">Documentation overview</a><ul>
-  <li><a href="face_trigger.html">face_trigger package</a><ul>
-      <li>Previous: <a href="face_trigger.process.html" title="previous chapter">face_trigger.process package</a></li>
-  </ul></li>
-  </ul></li>
-</ul>
-</div>
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="face_trigger.process.html"
+                        title="previous chapter">face_trigger.process package</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/face_trigger.utils.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
 <div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
     <div class="searchformwrapper">
@@ -317,20 +304,25 @@
       </div>
       <div class="clearer"></div>
     </div>
-    <div class="footer">
-      &copy;2018, Author.
-      
-      |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.7.6</a>
-      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.11</a>
-      
-      |
-      <a href="_sources/face_trigger.utils.rst.txt"
-          rel="nofollow">Page source</a>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="face_trigger.process.html" title="face_trigger.process package"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">Face Trigger  documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="face_trigger.html" >face_trigger package</a> &#187;</li> 
+      </ul>
     </div>
-
-    
-
-    
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2018, Softura.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.6.
+    </div>
   </body>
 </html>

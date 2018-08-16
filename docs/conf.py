@@ -19,9 +19,9 @@
 
 # -- Project information -----------------------------------------------------
 
-project = u'face_trigger'
-copyright = u'2018, Author'
-author = u'Author'
+project = u'Face Trigger'
+copyright = u'2018, Softura'
+author = u'Ankur Roy Chowdhury'
 
 # The short X.Y version
 version = u''
@@ -40,7 +40,6 @@ release = u''
 # ones.
 extensions = [
     'sphinx.ext.autodoc',
-    'sphinx.ext.viewcode',
     'sphinx.ext.todo',
 ]
 
@@ -77,7 +76,7 @@ pygments_style = 'sphinx'
 # The theme to use for HTML and HTML Help pages.  See the documentation for
 # a list of builtin themes.
 #
-html_theme = 'alabaster'
+html_theme = 'classic'
 
 # Theme options are theme-specific and customize the look and feel of a theme
 # further.  For a list of options available for each theme, see the
