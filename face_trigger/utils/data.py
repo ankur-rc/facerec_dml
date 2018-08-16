@@ -1,3 +1,9 @@
+"""
+Module that contains functions related to dataset cleaning.
+
+.. moduleauthor:: Ankur Roy Chowdhury < ankurrc@softura.com >
+"""
+
 from __future__ import absolute_import
 from __future__ import division
 from __future__ import print_function

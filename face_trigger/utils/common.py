@@ -1,3 +1,9 @@
+"""
+Module that contains various common utilities.
+
+.. moduleauthor:: Ankur Roy Chowdhury < ankurrc@softura.com >
+"""
+
 import threading
 import time
 import numpy as np

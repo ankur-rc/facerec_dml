@@ -1,3 +1,9 @@
+"""
+Deep Learning based face recognition module.
+
+.. moduleauthor:: Ankur Roy Chowdhury <ankurrc@softura.com>
+"""
+
 from __future__ import absolute_import
 from __future__ import division
 from __future__ import print_function
@@ -19,23 +25,19 @@ from sklearn.externals import joblib
 
 from face_trigger.process.post_process import FaceDetector
 
-"""
-Deep Learning based face recognition module.
-"""
-
 
 class FaceRecognizer():
 
     """
     Trains a face recognition model based on deep metric learning.
-    https://arxiv.org/abs/1503.03832
+    'Original paper <https://arxiv.org/abs/1503.03832>'_
     """
 
     def __init__(self, dnn_model_path=None, classifier_model_path=None, label_map_path=None):
         """
         Instantiate a FaceRecognizer object
 
-        :param dnn_model_path: path to the trainined dnn featyure extractor
+        :param dnn_model_path: path to the trainined dnn feature extractor
         :type dnn_model_path: str
         :param classifier_model_path: path to the trained sklearn classifier
         :type classifier_model_path: str

@@ -1,3 +1,10 @@
+"""
+Module that contains functions for loading embeddings from dataset during training.
+
+.. moduleauthor:: Ankur Roy Chowdhury < ankurrc@softura.com >
+"""
+
+
 from __future__ import absolute_import
 from __future__ import division
 from __future__ import print_function

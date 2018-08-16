@@ -1,0 +1,244 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>face_trigger.model.deep package &#8212; face_trigger  documentation</title>
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="face_trigger.process package" href="face_trigger.process.html" />
+    <link rel="prev" title="face_trigger.model package" href="face_trigger.model.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="face-trigger-model-deep-package">
+<h1>face_trigger.model.deep package<a class="headerlink" href="#face-trigger-model-deep-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-face_trigger.model.deep.FaceRecognizer">
+<span id="face-trigger-model-deep-facerecognizer-module"></span><h2>face_trigger.model.deep.FaceRecognizer module<a class="headerlink" href="#module-face_trigger.model.deep.FaceRecognizer" title="Permalink to this headline">¶</a></h2>
+<p>Deep Learning based face recognition module.</p>
+<dl class="class">
+<dt id="face_trigger.model.deep.FaceRecognizer.FaceRecognizer">
+<em class="property">class </em><code class="descclassname">face_trigger.model.deep.FaceRecognizer.</code><code class="descname">FaceRecognizer</code><span class="sig-paren">(</span><em>dnn_model_path=None</em>, <em>classifier_model_path=None</em>, <em>label_map_path=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/face_trigger/model/deep/FaceRecognizer.html#FaceRecognizer"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#face_trigger.model.deep.FaceRecognizer.FaceRecognizer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Trains a face recognition model based on deep metric learning.
+‘Original paper &lt;<a class="reference external" href="https://arxiv.org/abs/1503.03832">https://arxiv.org/abs/1503.03832</a>&gt;’_</p>
+<dl class="method">
+<dt id="face_trigger.model.deep.FaceRecognizer.FaceRecognizer.embed">
+<code class="descname">embed</code><span class="sig-paren">(</span><em>images=None</em>, <em>landmarks=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/face_trigger/model/deep/FaceRecognizer.html#FaceRecognizer.embed"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#face_trigger.model.deep.FaceRecognizer.FaceRecognizer.embed" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generates embeddings for the given images. THe images should be a result of the face detector phase, 
+i.e these images should contain a face detected by the face detector.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>images</strong> (<em>list of numpy.nadarray:</em><em> (</em><em>num_images</em><em>, </em><em>image_height</em><em>, </em><em>image_width</em><em>)</em>) – the images to get embeddings of</li>
+<li><strong>landmarks</strong> (<em>list</em><em>, </em><em>shape:</em><em> (</em><em>num_images</em><em>, </em><em>5</em><em>, </em><em>2</em><em>)</em>) – the facial landmarks of the images</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">the face embeddings</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">list</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Note:</strong> The images contain the entire frame, and not just the cropped out face. Alignmnet is taken care of when we generate the embeddings.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="face_trigger.model.deep.FaceRecognizer.FaceRecognizer.infer">
+<code class="descname">infer</code><span class="sig-paren">(</span><em>embeddings</em>, <em>threshold=0.2</em>, <em>unknown_index=-1</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/face_trigger/model/deep/FaceRecognizer.html#FaceRecognizer.infer"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#face_trigger.model.deep.FaceRecognizer.FaceRecognizer.infer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Infer and return a predicted face identity.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>embeddings</strong> (<em>list</em>) – 128D face embeddings</li>
+<li><strong>threshold</strong> (<em>float</em>) – probability threshold to accept a prediction result</li>
+<li><strong>unknown_index</strong> (<em>int</em>) – a integer id that denotes an unknown class</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">an identity</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">int</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="face_trigger.model.deep.FaceRecognizer.FaceRecognizer.load">
+<code class="descname">load</code><span class="sig-paren">(</span><em>classifier_model_path</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/face_trigger/model/deep/FaceRecognizer.html#FaceRecognizer.load"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#face_trigger.model.deep.FaceRecognizer.FaceRecognizer.load" title="Permalink to this definition">¶</a></dt>
+<dd><p>Load the saved classifier model.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>classifier_model_path</strong> (<em>string</em>) – path to the trained classifier model</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="face_trigger.model.deep.FaceRecognizer.FaceRecognizer.load_label_mapping">
+<code class="descname">load_label_mapping</code><span class="sig-paren">(</span><em>label_map_path=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/face_trigger/model/deep/FaceRecognizer.html#FaceRecognizer.load_label_mapping"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#face_trigger.model.deep.FaceRecognizer.FaceRecognizer.load_label_mapping" title="Permalink to this definition">¶</a></dt>
+<dd><p>Loads the mapping between the real labels and the ones used by sklearn during training.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>label_map_path</strong> (<em>str</em>) – path to the pickled label map</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">a dictionary mapping from encoded label to real label</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">dict</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="face_trigger.model.deep.FaceRecognizer.FaceRecognizer.save">
+<code class="descname">save</code><span class="sig-paren">(</span><em>classifier_model_path</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/face_trigger/model/deep/FaceRecognizer.html#FaceRecognizer.save"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#face_trigger.model.deep.FaceRecognizer.FaceRecognizer.save" title="Permalink to this definition">¶</a></dt>
+<dd><p>Save the trained classifier.
+Call only after fitting the embeddings, otherwise will throw an exception.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>classifier_model_path</strong> (<em>string</em>) – path along with name specifiying where to save the model. Extension should be .pkl for brevity.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="face_trigger.model.deep.FaceRecognizer.FaceRecognizer.train">
+<code class="descname">train</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/face_trigger/model/deep/FaceRecognizer.html#FaceRecognizer.train"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#face_trigger.model.deep.FaceRecognizer.FaceRecognizer.train" title="Permalink to this definition">¶</a></dt>
+<dd><p>Train the recognizer on the training set. Not required when working with pre-trained models.
+TODO: Implement the training mechanism</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-face_trigger.model.deep">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-face_trigger.model.deep" title="Permalink to this headline">¶</a></h2>
+</div>
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">face_trigger</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="face_trigger.html">face_trigger package</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="face_trigger.html#subpackages">Subpackages</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="face_trigger.model.html">face_trigger.model package</a><ul class="current">
+<li class="toctree-l4 current"><a class="reference internal" href="face_trigger.model.html#subpackages">Subpackages</a></li>
+<li class="toctree-l4"><a class="reference internal" href="face_trigger.model.html#submodules">Submodules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="face_trigger.model.html#module-face_trigger.model.FaceRecognizer">face_trigger.model.FaceRecognizer module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="face_trigger.model.html#module-face_trigger.model">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="face_trigger.process.html">face_trigger.process package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="face_trigger.utils.html">face_trigger.utils package</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="face_trigger.html#module-face_trigger">Module contents</a></li>
+</ul>
+</li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+  <li><a href="face_trigger.html">face_trigger package</a><ul>
+  <li><a href="face_trigger.model.html">face_trigger.model package</a><ul>
+      <li>Previous: <a href="face_trigger.model.html" title="previous chapter">face_trigger.model package</a></li>
+      <li>Next: <a href="face_trigger.process.html" title="next chapter">face_trigger.process package</a></li>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2018, Author.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.7.6</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.11</a>
+      
+      |
+      <a href="_sources/face_trigger.model.deep.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>
