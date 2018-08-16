@@ -6,7 +6,7 @@ SPHINXOPTS    =
 SPHINXBUILD   = sphinx-build
 SPHINXPROJ    = face_trigger
 SOURCEDIR     = .
-BUILDDIR      = build
+BUILDDIR      = site
 
 # Put it first so that "make" without argument is like "make help".
 help:

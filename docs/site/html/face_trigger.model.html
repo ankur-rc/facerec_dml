@@ -1,0 +1,200 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>face_trigger.model package &#8212; face_trigger  documentation</title>
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="face_trigger.model.deep package" href="face_trigger.model.deep.html" />
+    <link rel="prev" title="face_trigger package" href="face_trigger.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="face-trigger-model-package">
+<h1>face_trigger.model package<a class="headerlink" href="#face-trigger-model-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="subpackages">
+<h2>Subpackages<a class="headerlink" href="#subpackages" title="Permalink to this headline">¶</a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="face_trigger.model.deep.html">face_trigger.model.deep package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="face_trigger.model.deep.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="face_trigger.model.deep.html#module-face_trigger.model.deep.FaceRecognizer">face_trigger.model.deep.FaceRecognizer module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="face_trigger.model.deep.html#module-face_trigger.model.deep">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<div class="section" id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-face_trigger.model.FaceRecognizer">
+<span id="face-trigger-model-facerecognizer-module"></span><h2>face_trigger.model.FaceRecognizer module<a class="headerlink" href="#module-face_trigger.model.FaceRecognizer" title="Permalink to this headline">¶</a></h2>
+<p>LBPH-based Face recognition module</p>
+<dl class="class">
+<dt id="face_trigger.model.FaceRecognizer.FaceRecognizer">
+<em class="property">class </em><code class="descclassname">face_trigger.model.FaceRecognizer.</code><code class="descname">FaceRecognizer</code><a class="reference internal" href="_modules/face_trigger/model/FaceRecognizer.html#FaceRecognizer"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#face_trigger.model.FaceRecognizer.FaceRecognizer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Face recognition class ikmplementing the LBPH algorithm</p>
+<dl class="method">
+<dt id="face_trigger.model.FaceRecognizer.FaceRecognizer.evaluate">
+<code class="descname">evaluate</code><span class="sig-paren">(</span><em>predictions</em>, <em>ground_truths</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/face_trigger/model/FaceRecognizer.html#FaceRecognizer.evaluate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#face_trigger.model.FaceRecognizer.FaceRecognizer.evaluate" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="face_trigger.model.FaceRecognizer.FaceRecognizer.load">
+<code class="descname">load</code><span class="sig-paren">(</span><em>name</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/face_trigger/model/FaceRecognizer.html#FaceRecognizer.load"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#face_trigger.model.FaceRecognizer.FaceRecognizer.load" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="face_trigger.model.FaceRecognizer.FaceRecognizer.predict">
+<code class="descname">predict</code><span class="sig-paren">(</span><em>images</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/face_trigger/model/FaceRecognizer.html#FaceRecognizer.predict"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#face_trigger.model.FaceRecognizer.FaceRecognizer.predict" title="Permalink to this definition">¶</a></dt>
+<dd><p>Predicts the labels of the given images</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>images</strong> (<em>numpy.ndarray shape:</em><em> (</em><em>num_images</em><em>, </em><em>image_height</em><em>, </em><em>image_width</em><em>)</em>) – the images to test on</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">the predicted labels</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">array</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="face_trigger.model.FaceRecognizer.FaceRecognizer.save">
+<code class="descname">save</code><span class="sig-paren">(</span><em>name</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/face_trigger/model/FaceRecognizer.html#FaceRecognizer.save"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#face_trigger.model.FaceRecognizer.FaceRecognizer.save" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="face_trigger.model.FaceRecognizer.FaceRecognizer.train">
+<code class="descname">train</code><span class="sig-paren">(</span><em>images</em>, <em>labels</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/face_trigger/model/FaceRecognizer.html#FaceRecognizer.train"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#face_trigger.model.FaceRecognizer.FaceRecognizer.train" title="Permalink to this definition">¶</a></dt>
+<dd><p>Train the recognizer on the training set</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>images</strong> (<em>numpy.ndarray shape:</em><em> (</em><em>num_images</em><em>, </em><em>image_height</em><em>, </em><em>image_width</em><em>)</em>) – the images to train on</li>
+<li><strong>labels</strong> (<em>numpy.ndarray shape:</em><em> (</em><em>num_images</em><em>,</em><em>)</em>) – the labels/subjects the corresponding faces belong to</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-face_trigger.model">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-face_trigger.model" title="Permalink to this headline">¶</a></h2>
+</div>
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">face_trigger</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="face_trigger.html">face_trigger package</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="face_trigger.html#subpackages">Subpackages</a><ul class="current">
+<li class="toctree-l3 current"><a class="current reference internal" href="#">face_trigger.model package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#subpackages">Subpackages</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#submodules">Submodules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-face_trigger.model.FaceRecognizer">face_trigger.model.FaceRecognizer module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-face_trigger.model">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="face_trigger.process.html">face_trigger.process package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="face_trigger.utils.html">face_trigger.utils package</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="face_trigger.html#module-face_trigger">Module contents</a></li>
+</ul>
+</li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+  <li><a href="face_trigger.html">face_trigger package</a><ul>
+      <li>Previous: <a href="face_trigger.html" title="previous chapter">face_trigger package</a></li>
+      <li>Next: <a href="face_trigger.model.deep.html" title="next chapter">face_trigger.model.deep package</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2018, Author.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.7.6</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.11</a>
+      
+      |
+      <a href="_sources/face_trigger.model.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>
