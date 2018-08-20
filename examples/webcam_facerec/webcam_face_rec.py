@@ -15,6 +15,8 @@ from face_trigger.model.deep.FaceRecognizer import FaceRecognizer
 from face_trigger.process.post_process import FaceDetector, LandmarkDetector, FaceAlign
 from face_trigger.utils.common import RepeatedTimer, clamp_rectangle
 
+from configurator import setup_logging, setup_config
+
 
 source = None  # reference to cv2.VideoCapture object
 fps_counter = None  # repeated timer object
@@ -27,9 +29,12 @@ faces = []  # list to hold face bounding boxes across the batch
 fps_queue = deque(maxlen=100)
 
 
-def run():
+def run(config):
     """
     Main loop of the program
+
+    :param config: a dict with default values for various configuration parameters
+    :type config: dict
     """
 
     logger = logging.getLogger(__name__)
@@ -42,15 +47,25 @@ def run():
     global landmarks
     global faces
 
-    face_area_threshold = 0.15
-    camera_index = 0
-    cam_height, cam_width = 360, 360
-    batch_size = 10
-    face_recognition_confidence_threshold = 0.25
-    frame_skip_factor = 3
+    # setup the configuration
+    face_area_threshold = config.get("face_area_threshold", 0.25)
+    camera_index = config.get("camera_index", 0)
+    cam_height, cam_width = config.get(
+        "cam_height", 640), config.get("cam_width", 640)
+    batch_size = config.get("batch_size", 15)
+    face_recognition_confidence_threshold = config.get(
+        "face_recognition_confidence_threshold", 0.35)
+    frame_skip_factor = config.get("frame_skip_factor", 8)
+    unknown_class = config.get("unknown_class", -1)
 
-    svm_model_path = "/media/ankurrc/new_volume/softura/facerec/trained/classifier.pkl"
-    label_mapping_path = "/media/ankurrc/new_volume/softura/facerec/trained/label_mapping.pkl"
+    svm_model_path = config.get(
+        "svm_model_path", "classifier.pkl")
+    label_mapping_path = config.get(
+        "label_mapping_path", "label_mapping.pkl")
+
+    # print("{}\n{}\n{}\n{}\n{}\n{}\n{}\n{}\n{}\n{}\n".format(
+    #     face_area_threshold, camera_index, cam_height, cam_width, batch_size,
+    #     face_recognition_confidence_threshold, frame_skip_factor, unknown_class,  svm_model_path, label_mapping_path))
 
     source = cv2.VideoCapture(index=camera_index)
     source.set(cv2.CAP_PROP_FRAME_WIDTH, cam_width)
@@ -133,13 +148,14 @@ def run():
                     images=faces, landmarks=landmarks)
 
                 predicted_identity = face_recognizer.infer(
-                    face_embeddings, threshold=face_recognition_confidence_threshold)
+                    face_embeddings, threshold=face_recognition_confidence_threshold, unknown_index=unknown_class)
 
                 end_time = time.time()  # batch:100 s: ~1.5 sec; p:
                 logger.debug("End time: {}. Runtime: {}".format(
                     end_time, (end_time-start_time)))
 
-                print("Predicted identity:", predicted_identity)
+                logger.info("Predicted identity: {}".format(
+                    predicted_identity))
 
                 # start a new face recognition activity
                 start_over()
@@ -210,10 +226,12 @@ def fps_count():
 import logging
 if __name__ == "__main__":
 
-    logging.basicConfig(level=logging.DEBUG)
+    # logging.basicConfig(level=logging.DEBUG)
+    setup_logging()
+    config = setup_config()
 
     try:
-        run()
+        run(config=config)
     except Exception as e:
         print(e)
         traceback.print_exc()
