@@ -23,6 +23,8 @@ from sklearn.preprocessing import LabelEncoder
 from sklearn.metrics import accuracy_score
 from sklearn.externals import joblib
 
+from collections import Counter
+
 from face_trigger.process.post_process import FaceDetector
 
 
@@ -172,7 +174,7 @@ class FaceRecognizer():
             "Predicted indices after thresholding: {}".format(prediction_indices))
 
         # get the index that occured the most in the batch that was evaluated
-        predicted_identity = np.max(prediction_indices)
+        predicted_identity = Counter(prediction_indices).most_common(1)[0][0]
 
         if predicted_identity != unknown:
             predicted_identity = self.label_map[predicted_identity]
