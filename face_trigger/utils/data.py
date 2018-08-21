@@ -34,7 +34,7 @@ class Dataset():
     >>> dataset = Dataset(dataset_path="/media/ankurrc/new_volume/softura/facerec/datasets/norm_standard_att")
     >>> folds = 3
     >>> training_samples = [2, 5, 8]
-    >>> dataset.split(num_train_list=training_samples, folds=folds, 
+    >>> dataset.split(num_train_list=training_samples, folds=folds,
                     split_path="/media/ankurrc/new_volume/softura/facerec/split_path")
 
     """
@@ -301,24 +301,31 @@ def dataset_filter(dataset_path=None, output_path=None):
                 # reject this image in case no landmarks found
                 if landmarks is None:
 
-                    root = os.path.basename(root)
-                    if root in rejected_faces:
-                        rejected_faces[root].append(img)
+                    key = os.path.basename(root)
+                    if key in rejected_faces:
+                        rejected_faces[key].append(
+                            {"img": img, "reason": "No landmarks!"})
                     else:
-                        rejected_faces[root] = [img]
+                        rejected_faces[key] = [
+                            {"img": img, "reason": "No landmarks!"}]
                 else:
                     # write to output directory
                     save_path = os.path.join(
                         output_path, os.path.basename(root), img)
 
-                    cv2.imwrite(save_path, rgbImg)
+                    ret = cv2.imwrite(save_path, rgbImg)
+                    if ret is False:
+                        raise Exception(
+                            "Failed to write file:{}".format(save_path))
 
             else:
-                root = os.path.basename(root)
-                if root in rejected_faces:
-                    rejected_faces[root].append(img)
+                key = os.path.basename(root)
+                if key in rejected_faces:
+                    rejected_faces[key].append(
+                        {"img": img, "reason": "faces detected: {}".format(len(faces))})
                 else:
-                    rejected_faces[root] = [img]
+                    rejected_faces[key] = [
+                        {"img": img, "reason": "faces detected: {}".format(len(faces))}]
 
         if root != dataset_path:
             bar.update()
@@ -327,7 +334,7 @@ def dataset_filter(dataset_path=None, output_path=None):
 
     logger.info("Filtered dataset created at {}".format(output_path))
 
-    print("Rejected directories:")
+    print("Rejected files:")
     pprint.pprint(rejected_faces)
 
     return rejected_faces
@@ -335,23 +342,26 @@ def dataset_filter(dataset_path=None, output_path=None):
 
 def get_jittered_images(image_path, num_jitters=5, disturb_colors=False):
 
-    face_detector = FaceDetector()
+    face_detector = FaceDetector(face_area_threshold=0.0)
     landmark_predictor = LandmarkDetector()
 
-    # Load the image using dlib
-    img = cv2.imread(image_path)
+    rgbImg = cv2.imread(image_path)
+    grayImg = None
+    if rgbImg is None:
+        raise Exception("Image could not be loaded!")
+    elif rgbImg.shape[2] == 3:
+        grayImg = cv2.cvtColor(rgbImg, cv2.COLOR_BGR2GRAY)
+    else:
+        grayImg = rgbImg
 
     # Ask the detector to find the bounding boxes of each face.
-    dets = face_detector.detect_unbounded(img)
+    face_bb = face_detector.detect_unbounded(grayImg)
 
-    num_faces = len(dets)
+    landmarks = landmark_predictor.predict(
+        bounding_box=face_bb[0], grayImg=grayImg)
 
-    # Find the 5 face landmarks we need to do the alignment.
-    faces = dlib.full_object_detections()
-    for detection in dets:
-        faces.append(landmark_predictor.predict(detection, img))
-
-    aligned_face = dlib.get_face_chip(img, faces[0], size=320)
+    aligned_face = dlib.get_face_chip(cv2.cvtColor(
+        grayImg, cv2.COLOR_GRAY2RGB), landmarks, size=320, padding=1.0)
 
     jittered_images = dlib.jitter_image(
         aligned_face, num_jitters=num_jitters, disturb_colors=disturb_colors)

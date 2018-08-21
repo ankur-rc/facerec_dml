@@ -58,13 +58,13 @@ class FaceRecognizer():
         if classifier_model_path is not None:
             self.classifier = self.load(classifier_model_path)
         else:
-            raise Exception("No classifier model path given!")
+            self.logger.warn("Classifier model path not given.")
 
         if label_map_path is not None:
             self.label_map = self.load_label_mapping(
                 label_map_path=label_map_path)
         else:
-            raise Exception("No label mapping provided!")
+            self.logger.warn("No label mapping provided!")
 
     def train(self):
         """
