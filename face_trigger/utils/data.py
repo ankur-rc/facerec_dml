@@ -19,6 +19,7 @@ import cv2
 import uuid
 import pprint
 import tqdm
+import dlib
 
 from face_trigger.process.post_process import FaceDetector, LandmarkDetector, FaceAlign
 
