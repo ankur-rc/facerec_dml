@@ -35,6 +35,11 @@ fps_queue = deque(maxlen=100)
 
 
 def speak(unknown=False, person_name=None):
+    """
+    Speaks out the text fed to it.
+    :param bool unknown: flag to indicate whether the person was unidentified
+    :param str person_name: the name of the person. If unknown is set to TRue, no need to set this parameter.
+    """
     voice_path = os.path.join(os.path.dirname(
         os.path.abspath(__file__)), "voice")
 
