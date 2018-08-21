@@ -35,8 +35,9 @@ def setup_config(config_file_path='config.json'):
             data = json.load(f)
             logging.info("Configuration parameters are: {}".format(data))
 
-            return data
+        return data
 
     else:
         logging.warn(
             "Configuration file does not exist! Using default configuration. (Defined in-program)")
+        return {}

@@ -8,6 +8,11 @@ import traceback
 import numpy as np
 from collections import deque
 import logging
+import os
+
+from gtts import gTTS
+from pygame import mixer
+from tempfile import TemporaryFile
 
 import face_trigger
 
@@ -27,6 +32,37 @@ landmarks = []  # list to hold the face landmarks across the batch
 faces = []  # list to hold face bounding boxes across the batch
 # queue holding information of the last fps counts; used to generate avg, fps
 fps_queue = deque(maxlen=100)
+
+
+def speak(unknown=False, person_name=None):
+    voice_path = os.path.join(os.path.dirname(
+        os.path.abspath(__file__)), "voice")
+
+    if not os.path.exists(voice_path):
+        os.makedirs(voice_path)
+
+    person_unknown_msg = "Person cannot be identified"
+    person_id_msg_prefix = "Person identified as "
+    try:
+        tts = None
+        if unknown is True:
+            tts = gTTS(person_unknown_msg)
+        else:
+            msg = person_id_msg_prefix + \
+                str(unicode(person_name, encoding='utf-8'))
+            tts = gTTS(msg)
+
+        mixer.init()
+        sf = TemporaryFile()
+        tts.write_to_fp(sf)
+        sf.seek(0)
+        mixer.music.load(sf)
+        mixer.music.play()
+
+        time.sleep(4)
+
+    except Exception:
+        raise
 
 
 def run(config):
@@ -154,6 +190,11 @@ def run(config):
                 logger.debug("End time: {}. Runtime: {}".format(
                     end_time, (end_time-start_time)))
 
+                if predicted_identity == unknown_class:
+                    speak(unknown=True)
+                else:
+                    speak(unknown=False, person_name=predicted_identity)
+
                 logger.info("Predicted identity: {}".format(
                     predicted_identity))
 
@@ -195,7 +236,7 @@ def cleanup():
 def start_over():
     """
     Resets the following variables, if there is a discontinuity in detecting a face among consecutive frames:
-    1. faces - all detected faces 
+    1. faces - all detected faces
     2. landmarks - facial landmarks of the detected faces
     3. sequence - the counter for the sequence
     """
