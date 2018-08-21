@@ -330,3 +330,29 @@ def dataset_filter(dataset_path=None, output_path=None):
     pprint.pprint(rejected_faces)
 
     return rejected_faces
+
+
+def get_jittered_images(image_path, num_jitters=5, disturb_colors=False):
+
+    face_detector = FaceDetector()
+    landmark_predictor = LandmarkDetector()
+
+    # Load the image using dlib
+    img = cv2.imread(image_path)
+
+    # Ask the detector to find the bounding boxes of each face.
+    dets = face_detector.detect_unbounded(img)
+
+    num_faces = len(dets)
+
+    # Find the 5 face landmarks we need to do the alignment.
+    faces = dlib.full_object_detections()
+    for detection in dets:
+        faces.append(landmark_predictor.predict(detection, img))
+
+    aligned_face = dlib.get_face_chip(img, faces[0], size=320)
+
+    jittered_images = dlib.jitter_image(
+        aligned_face, num_jitters=num_jitters, disturb_colors=disturb_colors)
+
+    return jittered_images
