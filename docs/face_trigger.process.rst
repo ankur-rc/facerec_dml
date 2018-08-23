@@ -1,5 +1,7 @@
-face\_trigger.process package
-=============================
+Face Trigger - Process package
+==============================
+
+Contains code for performing face detection, landmark detection and face alignment.
 
 Submodules
 ----------

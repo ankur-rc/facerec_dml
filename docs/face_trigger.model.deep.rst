@@ -1,5 +1,6 @@
 face\_trigger.model.deep package
 ================================
+Contains the class that performs face-recognition based on Deep Metric Learning.
 
 Submodules
 ----------

@@ -1,5 +1,6 @@
-face\_trigger package
-=====================
+'face\_trigger' package
+=======================
+Root package.
 
 Subpackages
 -----------

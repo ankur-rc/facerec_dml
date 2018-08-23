@@ -1,5 +1,6 @@
-face\_trigger.model package
-===========================
+Face Trigger - Model package
+============================
+Contains classes for performing face-recognition.
 
 Subpackages
 -----------

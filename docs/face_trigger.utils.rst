@@ -1,5 +1,6 @@
-face\_trigger.utils package
-===========================
+Face Trigger - Utils package
+============================
+Contains modules for performing common utilities.
 
 Submodules
 ----------
