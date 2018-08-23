@@ -24,9 +24,9 @@ copyright = u'2018, Softura'
 author = u'Ankur Roy Chowdhury'
 
 # The short X.Y version
-version = u''
+version = u'1.0'
 # The full version, including alpha/beta/rc tags
-release = u''
+release = u'0-rc'
 
 
 # -- General configuration ---------------------------------------------------
@@ -130,7 +130,7 @@ latex_elements = {
 # (source start file, target name, title,
 #  author, documentclass [howto, manual, or own class]).
 latex_documents = [
-    (master_doc, 'face_trigger.tex', u'face\\_trigger Documentation',
+    (master_doc, 'face_trigger.tex', u'Face Trigger Documentation',
      u'Author', 'manual'),
 ]
 
@@ -140,7 +140,7 @@ latex_documents = [
 # One entry per manual page. List of tuples
 # (source start file, name, description, authors, manual section).
 man_pages = [
-    (master_doc, 'face_trigger', u'face_trigger Documentation',
+    (master_doc, 'face_trigger', u'Face Trigger Documentation',
      [author], 1)
 ]
 
