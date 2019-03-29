@@ -2,6 +2,8 @@
 ![version](https://img.shields.io/badge/version-0.2.1-blue.svg)  ![build](https://img.shields.io/badge/build-passing-green.svg) 
 > Facial recognition framework
 
+See [implmentation](https://github.com/nautilusPrime/deeplens_facerec) on Amazon Deeplens.
+
 ### Introduction
 “Face Trigger” (FT) is a *framework* for building applications that rely on **face-recognition**. It enables the development of an end-to-end pipeline for training a machine learning classifier for the purposes of identifying people’s faces.
 
