@@ -7,6 +7,15 @@ The __examples__ folder includes a sample program.
 
 [Documentation](https://nautilusprime.github.io/facerec_dml/site/html/index.html)
 
+### Install
+```
+pip install .
+```
+or for making changes to the installed module:
+```
+pip install -e .
+```
+
 ### Introduction
 “Face Trigger” (FT) is a *framework* for building applications that rely on **face-recognition**. It enables the development of an end-to-end pipeline for training a machine learning classifier for the purposes of identifying people’s faces.
 
