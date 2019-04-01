@@ -2,10 +2,10 @@
 ![version](https://img.shields.io/badge/version-0.2.1-blue.svg)  ![build](https://img.shields.io/badge/build-passing-green.svg) 
 > Facial recognition framework
 
-See [implementation](https://github.com/nautilusPrime/deeplens_facerec) on Amazon Deeplens.
+See [implementation](https://github.com/ankur-rc/deeplens_facerec) on Amazon Deeplens.
 The __examples__ folder includes a sample program.
 
-[Documentation](https://nautilusprime.github.io/facerec_dml/site/html/index.html)
+[Documentation](https://ankur-rc.github.io/facerec_dml/site/html/index.html)
 
 ### Install
 ```
